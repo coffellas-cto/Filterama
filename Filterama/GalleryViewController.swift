@@ -8,7 +8,13 @@
 
 import UIKit
 
-class GalleryViewController: UIViewController, UICollectionViewDataSource {
+protocol GalleryViewControllerDelegate {
+    func galleryVC(galleryVC: GalleryViewController, selectedImage: UIImage)
+}
+
+class GalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    var delegate: GalleryViewControllerDelegate?
 
     @IBOutlet weak var collection: UICollectionView!
     
@@ -16,6 +22,7 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         collection.dataSource = self
+        collection.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,15 +40,11 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource {
         
         return cell
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if let delegate = delegate {
+            delegate.galleryVC(self, selectedImage: UIImage(named: "pic.jpg"))
+        }
     }
-    */
 
 }

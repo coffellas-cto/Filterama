@@ -8,7 +8,11 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate {
+    
+    var innerGalleryVC: GalleryViewController?
+    // MARK: IBOutlets
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadButton: UIButton!
     
@@ -17,6 +21,13 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBAction func loadPicture(sender: AnyObject) {
         var alertController = UIAlertController(title: "Choose an option", message: "", preferredStyle: .ActionSheet)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Filterama Pictures", style: .Default, handler: { (action) -> Void in
+            if self.innerGalleryVC == nil {
+                self.innerGalleryVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("GALLERY_VC") as? GalleryViewController
+                self.innerGalleryVC?.delegate = self
+            }
+            self.presentViewController(self.innerGalleryVC!, animated: true, completion: nil)
+        }))
         alertController.addAction(UIAlertAction(title: "Photo Library", style: .Default, handler: { (action) -> Void in
             self.showPickerViewWithSourceType(.PhotoLibrary)
         }))
@@ -74,6 +85,14 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         imageView.backgroundColor = UIColor.blackColor()
         picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: GalleryViewControllerDelegate Methods
+    
+    func galleryVC(galleryVC: GalleryViewController, selectedImage: UIImage) {
+        imageView.image = selectedImage
+        imageView.backgroundColor = UIColor.blackColor()
+        galleryVC.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // MARK: UIViewController Life Cycle
