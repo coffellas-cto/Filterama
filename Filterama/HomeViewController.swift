@@ -15,7 +15,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadButton: UIButton!
-    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     // MARK: IBActions
     
     @IBAction func loadPicture(sender: AnyObject) {
@@ -76,6 +76,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: UIImagePickerControllerDelegate Methods
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        activityIndicator.startAnimating()
+        imageView.backgroundColor = UIColor.blackColor()
+        picker.dismissViewControllerAnimated(true, completion: nil)
         if let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             imageView.image = selectedImage
         }
@@ -83,16 +86,22 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             imageView.image = selectedImage
         }
         
-        imageView.backgroundColor = UIColor.blackColor()
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        activityIndicator.stopAnimating()
     }
     
     // MARK: GalleryViewControllerDelegate Methods
     
-    func galleryVC(galleryVC: GalleryViewController, selectedImage: UIImage) {
-        imageView.image = selectedImage
-        imageView.backgroundColor = UIColor.blackColor()
+    func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String) {
+        activityIndicator.startAnimating()
+        self.imageView.backgroundColor = UIColor.blackColor()
         galleryVC.dismissViewControllerAnimated(true, completion: nil)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            let image = UIImage(contentsOfFile: selectedImagePath)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.imageView.image = image
+                self.activityIndicator.stopAnimating()
+            })
+        })
     }
     
     // MARK: UIViewController Life Cycle

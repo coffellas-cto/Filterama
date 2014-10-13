@@ -42,6 +42,10 @@
                                     </mask>
                                 </variation>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="wUg-tX-f2t">
+                                <rect key="frame" x="180" y="28" width="240" height="240"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.10000000000000001" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KIK-63-GrA">
                                 <rect key="frame" x="257" y="276" width="86" height="30"/>
                                 <state key="normal" title="Load picture">
@@ -56,11 +60,16 @@
                         <constraints>
                             <constraint firstItem="KIK-63-GrA" firstAttribute="top" secondItem="mhc-n5-Bat" secondAttribute="bottom" constant="8" id="5rz-iV-d7i"/>
                             <constraint firstAttribute="centerX" secondItem="KIK-63-GrA" secondAttribute="centerX" id="DAK-6l-eTM"/>
+                            <constraint firstItem="mhc-n5-Bat" firstAttribute="height" secondItem="wUg-tX-f2t" secondAttribute="height" id="Rcu-L9-X9m"/>
+                            <constraint firstItem="mhc-n5-Bat" firstAttribute="centerX" secondItem="wUg-tX-f2t" secondAttribute="centerX" id="Ww8-L3-Qjt"/>
                             <constraint firstItem="mhc-n5-Bat" firstAttribute="top" secondItem="tgQ-ke-nMv" secondAttribute="bottom" constant="8" id="bAo-7m-JD1"/>
                             <constraint firstAttribute="centerX" secondItem="mhc-n5-Bat" secondAttribute="centerX" id="dIq-x6-EYu"/>
+                            <constraint firstItem="mhc-n5-Bat" firstAttribute="centerY" secondItem="wUg-tX-f2t" secondAttribute="centerY" id="ggR-yP-LeR"/>
+                            <constraint firstItem="mhc-n5-Bat" firstAttribute="width" secondItem="wUg-tX-f2t" secondAttribute="width" id="gw0-JI-fs1"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="wUg-tX-f2t" id="Wxq-qD-NLb"/>
                         <outlet property="imageView" destination="mhc-n5-Bat" id="tg6-9I-iGM"/>
                         <outlet property="loadButton" destination="KIK-63-GrA" id="m5W-T7-MuR"/>
                     </connections>
@@ -81,6 +90,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="b65-a2-pg5">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.10000000000000001" colorSpace="calibratedRGB"/>
+                                <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="wjo-8C-TUa">
                                 <rect key="frame" x="0.0" y="44" width="600" height="556"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -101,10 +115,20 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                                     <color key="backgroundColor" red="0.50413797670000005" green="0.49791405109999998" blue="0.49791405109999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="jWv-uH-eD4">
+                                                    <rect key="frame" x="22" y="22" width="20" height="20"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstAttribute="centerY" secondItem="jWv-uH-eD4" secondAttribute="centerY" id="WUx-lj-xth"/>
+                                            <constraint firstAttribute="centerX" secondItem="jWv-uH-eD4" secondAttribute="centerX" id="Xw4-Yy-RRq"/>
+                                        </constraints>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="jWv-uH-eD4" id="zTY-cw-u8F"/>
                                             <outlet property="imageView" destination="aFP-Fw-912" id="qqJ-bb-gJD"/>
                                         </connections>
                                     </collectionViewCell>
@@ -119,13 +143,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerX" secondItem="b65-a2-pg5" secondAttribute="centerX" id="9ea-5O-KEV"/>
+                            <constraint firstAttribute="height" secondItem="b65-a2-pg5" secondAttribute="height" id="A8I-Rv-iYW"/>
+                            <constraint firstAttribute="centerY" secondItem="b65-a2-pg5" secondAttribute="centerY" id="Acf-ZJ-xGc"/>
                             <constraint firstItem="wjo-8C-TUa" firstAttribute="leading" secondItem="xEt-Wa-L3e" secondAttribute="leading" id="SIc-Gg-Ggf"/>
+                            <constraint firstAttribute="width" secondItem="b65-a2-pg5" secondAttribute="width" id="dHq-Og-ysO"/>
                             <constraint firstAttribute="height" secondItem="wjo-8C-TUa" secondAttribute="height" constant="44" id="fry-Jx-Cfl"/>
                             <constraint firstItem="wjo-8C-TUa" firstAttribute="bottom" secondItem="xEt-Wa-L3e" secondAttribute="top" id="uMO-zT-3RJ"/>
                             <constraint firstAttribute="width" secondItem="wjo-8C-TUa" secondAttribute="width" id="z2l-l8-nCw"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="b65-a2-pg5" id="Rr5-OH-bev"/>
                         <outlet property="collection" destination="wjo-8C-TUa" id="Pc1-b1-oDb"/>
                     </connections>
                 </viewController>
