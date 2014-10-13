@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>37AED3C7-C0F7-43BE-87B2-A3A9D92DB4B2</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Filterama</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>972C941DCFC15BF0B4488D7C52ACFEE5BA35437F</key>
+		<string>https://github.com/coffellas-cto/Filterama.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Filterama.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>972C941DCFC15BF0B4488D7C52ACFEE5BA35437F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/coffellas-cto/Filterama.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>972C941DCFC15BF0B4488D7C52ACFEE5BA35437F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>972C941DCFC15BF0B4488D7C52ACFEE5BA35437F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Filterama</string>
+		</dict>
+	</array>
+</dict>
+</plist>
