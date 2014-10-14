@@ -15,7 +15,7 @@ protocol GalleryViewControllerDelegate : NSObjectProtocol {
 class GalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     weak var delegate: GalleryViewControllerDelegate?
-    var imagesPathsArray = [String]()
+    var imagesPathsArray = NSArray()
     
     // MARK: Private Properties
     lazy private var imageConvertionQueue: NSOperationQueue = {
@@ -29,17 +29,18 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     // MARK: Private Methods
     
-    private func documentsFilePaths() -> [String] {
-        var retVal = [String]()
+    private func documentsFilePaths() -> NSArray {
+        var retVal = NSMutableArray()
         let fileManager = NSFileManager.defaultManager()
         let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first as NSString
         var error: NSError?
         if let fileNames = fileManager.contentsOfDirectoryAtPath(documentsDirectory, error: &error) as? [String] {
             for fileName in fileNames {
-                retVal.append(documentsDirectory.stringByAppendingPathComponent(fileName))
+                retVal.addObject(documentsDirectory.stringByAppendingPathComponent(fileName))
             }
         }
-        return retVal
+        
+        return retVal.filteredArrayUsingPredicate(NSPredicate(format: "pathExtension IN %@", ["jpg", "jpeg", "png", "tiff", "bmp"]))
     }
     
     // MARK: UICollectionView Delegates Methods
@@ -56,7 +57,7 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
         // TODO: all operations finish in the same time. Fix it
         
         imageConvertionQueue.addOperationWithBlock { () -> Void in
-            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row])
+            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row] as String)
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
@@ -66,23 +67,23 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
             })
         }
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row])
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                println(NSDate())
-                if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
-                    cell.imageView.image = image
-                    cell.activityIndicator.stopAnimating()
-                }
-            })
-        })
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+//            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row] as String)
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                println(NSDate())
+//                if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
+//                    cell.imageView.image = image
+//                    cell.activityIndicator.stopAnimating()
+//                }
+//            })
+//        })
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let delegate = delegate {
-            delegate.galleryVC(self, selectedImagePath: imagesPathsArray[indexPath.row])
+            delegate.galleryVC(self, selectedImagePath: imagesPathsArray[indexPath.row] as String)
         }
     }
     

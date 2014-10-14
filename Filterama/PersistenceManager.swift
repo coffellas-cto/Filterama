@@ -10,6 +10,9 @@ import Foundation
 import CoreData
 
 class PersistenceManager {
+    
+    // MARK: Class Variables
+    
     class var manager: PersistenceManager {
         struct Static {
             static var instance: PersistenceManager?
@@ -20,6 +23,8 @@ class PersistenceManager {
         }
         return Static.instance!
     }
+    
+    // MARK: Public Properties
     
     lazy var applicationDocumentsDirectory: NSURL = {
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
@@ -52,7 +57,7 @@ class PersistenceManager {
         return coordinator
         }()
     
-    lazy var managedObjectContext: NSManagedObjectContext? = {
+    lazy var managedObjectContext: NSManagedObjectContext! = {
         let coordinator = self.persistentStoreCoordinator
         if coordinator == nil {
             return nil
@@ -62,9 +67,26 @@ class PersistenceManager {
         return managedObjectContext
         }()
     
-    // MARK: - Core Data Saving support
+    // MARK: Public Methods
     
-    func saveContext () {
+    func populateFilters() {
+        for i in 0..<2 {
+            var newFilter = NSEntityDescription.insertNewObjectForEntityForName("Filter", inManagedObjectContext: managedObjectContext) as Filter
+            
+            switch i {
+            case 0:
+                newFilter.name = "CISepiaTone"
+            case 1:
+                newFilter.name = "CIGaussianBlur"
+            default:
+                break
+            }
+        }
+        
+        saveContext()
+    }
+    
+    func saveContext() {
         if let moc = self.managedObjectContext {
             var error: NSError? = nil
             if moc.hasChanges && !moc.save(&error) {

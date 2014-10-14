@@ -7,19 +7,23 @@
 //
 
 import UIKit
+import OpenGLES
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    
+    lazy var grpahicsContext: CIContext? = {
+        return CIContext(EAGLContext: EAGLContext(API: EAGLRenderingAPI.OpenGLES2), options: [kCIContextWorkingColorSpace: NSNull()])
+    }()
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        // Populate some data on first run
         let notFirstRunKey = "notFirstRunKey"
         let notFirstRun = NSUserDefaults.standardUserDefaults().objectForKey(notFirstRunKey) as Bool?
         if notFirstRun == nil {
-            NSUserDefaults.standardUserDefaults().setObject(true, forKey: notFirstRunKey)
+            println("First run")
             let fileManager = NSFileManager.defaultManager()
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first as NSString
             
@@ -29,6 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var error: NSError?
                 fileManager.copyItemAtPath(NSBundle.mainBundle().pathForResource(picName, ofType: "jpg")!, toPath: toPath, error: &error)
             }
+            
+            PersistenceManager.manager.populateFilters()
+            
+            NSUserDefaults.standardUserDefaults().setObject(true, forKey: notFirstRunKey)
         }
         return true
     }
@@ -48,8 +56,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         PersistenceManager.manager.saveContext()
     }
-
-    // MARK: - Core Data stack
     
 }
 

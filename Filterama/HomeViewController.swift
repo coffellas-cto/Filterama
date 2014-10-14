@@ -8,16 +8,13 @@
 
 import UIKit
 import CoreImage
-import OpenGLES
 
-class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate {
+class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var innerGalleryVC: GalleryViewController?
-    lazy var grpahicsContext: CIContext? = {
-        return CIContext(EAGLContext: EAGLContext(API: EAGLRenderingAPI.OpenGLES2), options: [kCIContextWorkingColorSpace: NSNull()])
-    }()
     // MARK: IBOutlets
     
+    @IBOutlet weak var filterCollectionView: UICollectionView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadButton: UIButton!
     // MARK: IBActions
@@ -57,6 +54,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.showAlertForUnexistingSourceType(type)
             return
         }
+        
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = type
@@ -102,10 +100,24 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         })
     }
     
+    // MARK: UICollectionView Delegates Methods
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as FilterCell
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    
     // MARK: UIViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        filterCollectionView.delegate = self
+        filterCollectionView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
