@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A41914B19EDAFF100BF03C5 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A41914A19EDAFF100BF03C5 /* PersistenceManager.swift */; };
 		9A5062C319EC3B2A00D0FCD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062C219EC3B2A00D0FCD6 /* AppDelegate.swift */; };
 		9A5062C619EC3B2A00D0FCD6 /* Filterama.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062C419EC3B2A00D0FCD6 /* Filterama.xcdatamodeld */; };
 		9A5062CB19EC3B2A00D0FCD6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A5062C919EC3B2A00D0FCD6 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9A41914A19EDAFF100BF03C5 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		9A5062BD19EC3B2A00D0FCD6 /* Filterama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filterama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A5062C119EC3B2A00D0FCD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A5062C219EC3B2A00D0FCD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +74,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9A41914C19EDAFF900BF03C5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9A41914A19EDAFF100BF03C5 /* PersistenceManager.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		9A5062B419EC3B2A00D0FCD6 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +111,7 @@
 				9A5062C019EC3B2A00D0FCD6 /* Supporting Files */,
 				9A5062E719EC422C00D0FCD6 /* View Controllers */,
 				9A5062EA19EC427100D0FCD6 /* Views */,
+				9A41914C19EDAFF900BF03C5 /* Models */,
 			);
 			path = Filterama;
 			sourceTree = "<group>";
@@ -268,6 +279,7 @@
 				9A5062EF19EC65D300D0FCD6 /* HomeViewController.swift in Sources */,
 				9A5062E919EC426800D0FCD6 /* GalleryCell.swift in Sources */,
 				9A5062E619EC3CC500D0FCD6 /* GalleryViewController.swift in Sources */,
+				9A41914B19EDAFF100BF03C5 /* PersistenceManager.swift in Sources */,
 				9A5062C319EC3B2A00D0FCD6 /* AppDelegate.swift in Sources */,
 				9A5062C619EC3B2A00D0FCD6 /* Filterama.xcdatamodeld in Sources */,
 			);

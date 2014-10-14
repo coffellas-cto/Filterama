@@ -7,15 +7,19 @@
 //
 
 import UIKit
+import CoreImage
+import OpenGLES
 
 class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate {
     
     var innerGalleryVC: GalleryViewController?
+    lazy var grpahicsContext: CIContext? = {
+        return CIContext(EAGLContext: EAGLContext(API: EAGLRenderingAPI.OpenGLES2), options: [kCIContextWorkingColorSpace: NSNull()])
+    }()
     // MARK: IBOutlets
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadButton: UIButton!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     // MARK: IBActions
     
     @IBAction func loadPicture(sender: AnyObject) {
@@ -76,8 +80,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: UIImagePickerControllerDelegate Methods
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        activityIndicator.startAnimating()
-        imageView.backgroundColor = UIColor.blackColor()
         picker.dismissViewControllerAnimated(true, completion: nil)
         if let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             imageView.image = selectedImage
@@ -86,20 +88,16 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             imageView.image = selectedImage
         }
         
-        activityIndicator.stopAnimating()
     }
     
     // MARK: GalleryViewControllerDelegate Methods
     
     func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String) {
-        activityIndicator.startAnimating()
-        self.imageView.backgroundColor = UIColor.blackColor()
         galleryVC.dismissViewControllerAnimated(true, completion: nil)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             let image = UIImage(contentsOfFile: selectedImagePath)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.imageView.image = image
-                self.activityIndicator.stopAnimating()
             })
         })
     }
@@ -108,13 +106,19 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidLayoutSubviews() {
+        imageView.layer.cornerRadius = imageView.frame.width / 2
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
     
 

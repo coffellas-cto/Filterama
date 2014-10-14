@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol GalleryViewControllerDelegate {
+protocol GalleryViewControllerDelegate : NSObjectProtocol {
     func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String)
 }
 
 class GalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    var delegate: GalleryViewControllerDelegate?
+    weak var delegate: GalleryViewControllerDelegate?
     var imagesPathsArray = [String]()
     
     // MARK: Private Properties
@@ -65,6 +65,17 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
                 }
             })
         }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row])
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                println(NSDate())
+                if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
+                    cell.imageView.image = image
+                    cell.activityIndicator.stopAnimating()
+                }
+            })
+        })
         
         return cell
     }
