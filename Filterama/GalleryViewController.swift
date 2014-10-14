@@ -16,13 +16,6 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
     
     weak var delegate: GalleryViewControllerDelegate?
     var imagesPathsArray = NSArray()
-    
-    // MARK: Private Properties
-    lazy private var imageConvertionQueue: NSOperationQueue = {
-        var queue = NSOperationQueue()
-        queue.maxConcurrentOperationCount = 10
-        return queue
-    }()
 
     @IBOutlet weak var collection: UICollectionView!
     
@@ -54,29 +47,12 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
         cell.imageView.image = nil
         cell.activityIndicator.startAnimating()
         
-        // TODO: all operations finish in the same time. Fix it
-        
-        imageConvertionQueue.addOperationWithBlock { () -> Void in
-            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row] as String)
-            
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
-                    cell.imageView.image = image
-                    cell.activityIndicator.stopAnimating()
-                }
-            })
+        ThumbnailGenerator.generateThumbnailFromFileAtPath(self.imagesPathsArray[indexPath.row] as? String, size: 64) { (thumbnailImage) -> Void in
+            if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
+                cell.imageView.image = thumbnailImage
+            }
+            cell.activityIndicator.stopAnimating()
         }
-
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-//            let image = UIImage(contentsOfFile: self.imagesPathsArray[indexPath.row] as String)
-//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                println(NSDate())
-//                if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
-//                    cell.imageView.image = image
-//                    cell.activityIndicator.stopAnimating()
-//                }
-//            })
-//        })
         
         return cell
     }
@@ -98,7 +74,6 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        imageConvertionQueue.cancelAllOperations()
     }
     
     override func viewWillAppear(animated: Bool) {

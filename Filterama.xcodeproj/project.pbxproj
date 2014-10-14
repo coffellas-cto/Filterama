@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9A22555119EDB67F00098868 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A22555019EDB67F00098868 /* Filter.swift */; };
 		9A22555319EDC26500098868 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A22555219EDC26500098868 /* FilterCell.swift */; };
+		9A22555519EDCE9D00098868 /* ThumbnailGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A22555419EDCE9D00098868 /* ThumbnailGenerator.swift */; };
+		9A22555919EDD05C00098868 /* UIImage+Filterama.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A22555819EDD05C00098868 /* UIImage+Filterama.m */; };
 		9A41914B19EDAFF100BF03C5 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A41914A19EDAFF100BF03C5 /* PersistenceManager.swift */; };
 		9A5062C319EC3B2A00D0FCD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062C219EC3B2A00D0FCD6 /* AppDelegate.swift */; };
 		9A5062C619EC3B2A00D0FCD6 /* Filterama.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062C419EC3B2A00D0FCD6 /* Filterama.xcdatamodeld */; };
@@ -39,6 +41,10 @@
 /* Begin PBXFileReference section */
 		9A22555019EDB67F00098868 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		9A22555219EDC26500098868 /* FilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
+		9A22555419EDCE9D00098868 /* ThumbnailGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailGenerator.swift; sourceTree = "<group>"; };
+		9A22555619EDD05C00098868 /* Filterama-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Filterama-Bridging-Header.h"; sourceTree = "<group>"; };
+		9A22555719EDD05C00098868 /* UIImage+Filterama.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Filterama.h"; sourceTree = "<group>"; };
+		9A22555819EDD05C00098868 /* UIImage+Filterama.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Filterama.m"; sourceTree = "<group>"; };
 		9A41914A19EDAFF100BF03C5 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		9A5062BD19EC3B2A00D0FCD6 /* Filterama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filterama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A5062C119EC3B2A00D0FCD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,10 +84,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9A22555A19EDD06B00098868 /* Objective-C Code */ = {
+			isa = PBXGroup;
+			children = (
+				9A22555719EDD05C00098868 /* UIImage+Filterama.h */,
+				9A22555819EDD05C00098868 /* UIImage+Filterama.m */,
+				9A22555619EDD05C00098868 /* Filterama-Bridging-Header.h */,
+			);
+			name = "Objective-C Code";
+			sourceTree = "<group>";
+		};
 		9A41914C19EDAFF900BF03C5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				9A41914A19EDAFF100BF03C5 /* PersistenceManager.swift */,
+				9A22555419EDCE9D00098868 /* ThumbnailGenerator.swift */,
 				9A22555019EDB67F00098868 /* Filter.swift */,
 			);
 			name = Models;
@@ -117,6 +134,7 @@
 				9A5062E719EC422C00D0FCD6 /* View Controllers */,
 				9A5062EA19EC427100D0FCD6 /* Views */,
 				9A41914C19EDAFF900BF03C5 /* Models */,
+				9A22555A19EDD06B00098868 /* Objective-C Code */,
 			);
 			path = Filterama;
 			sourceTree = "<group>";
@@ -283,10 +301,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A22555119EDB67F00098868 /* Filter.swift in Sources */,
+				9A22555919EDD05C00098868 /* UIImage+Filterama.m in Sources */,
 				9A22555319EDC26500098868 /* FilterCell.swift in Sources */,
 				9A5062EF19EC65D300D0FCD6 /* HomeViewController.swift in Sources */,
 				9A5062E919EC426800D0FCD6 /* GalleryCell.swift in Sources */,
 				9A5062E619EC3CC500D0FCD6 /* GalleryViewController.swift in Sources */,
+				9A22555519EDCE9D00098868 /* ThumbnailGenerator.swift in Sources */,
 				9A41914B19EDAFF100BF03C5 /* PersistenceManager.swift in Sources */,
 				9A5062C319EC3B2A00D0FCD6 /* AppDelegate.swift in Sources */,
 				9A5062C619EC3B2A00D0FCD6 /* Filterama.xcdatamodeld in Sources */,
@@ -418,6 +438,7 @@
 				INFOPLIST_FILE = Filterama/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Filterama/Filterama-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -430,6 +451,7 @@
 				INFOPLIST_FILE = Filterama/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Filterama/Filterama-Bridging-Header.h";
 			};
 			name = Release;
 		};

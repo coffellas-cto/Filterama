@@ -72,13 +72,16 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="showFilters:" destination="fie-jw-KR9" eventType="touchUpInside" id="HEy-Me-5TT"/>
+                                </connections>
                             </button>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
-                                <rect key="frame" x="0.0" y="532" width="600" height="60"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
+                                <color key="backgroundColor" red="0.046018016580000001" green="0.026375861970000001" blue="0.003886797867" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="gF4-J9-vad"/>
+                                    <constraint firstAttribute="height" id="gF4-J9-vad"/>
                                 </constraints>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="8" id="pq5-Rh-839">
                                     <size key="itemSize" width="60" height="60"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -90,10 +93,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YgM-n0-Wtz">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YgM-n0-Wtz">
                                                     <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 </imageView>
@@ -122,9 +124,11 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="constraintHeightFilterCollectionView" destination="gF4-J9-vad" id="eWy-Zr-awf"/>
                         <outlet property="filterCollectionView" destination="rFg-nI-sOt" id="qwa-Mz-Q5e"/>
                         <outlet property="imageView" destination="mhc-n5-Bat" id="tg6-9I-iGM"/>
                         <outlet property="loadButton" destination="KIK-63-GrA" id="m5W-T7-MuR"/>
+                        <outlet property="showFiltersButton" destination="i8F-7w-qJN" id="TF6-K5-6Y5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6aB-j9-Mf8" userLabel="First Responder" sceneMemberID="firstResponder"/>

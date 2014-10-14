@@ -11,12 +11,17 @@ import CoreImage
 
 class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    var innerGalleryVC: GalleryViewController?
-    // MARK: IBOutlets
+    // MARK: Private Properties
+    private var innerGalleryVC: GalleryViewController?
+    private var filtersActive = false
+    private var thumbnailFiltersOriginal: UIImage?
     
+    // MARK: IBOutlets
     @IBOutlet weak var filterCollectionView: UICollectionView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadButton: UIButton!
+    @IBOutlet weak var showFiltersButton: UIButton!
+    
     // MARK: IBActions
     
     @IBAction func loadPicture(sender: AnyObject) {
@@ -46,8 +51,36 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
+
+    @IBAction func showFilters(sender: AnyObject) {
+        showFiltersButton.setTitle(filtersActive ? "Show filters" : "Hide filters", forState: .Normal)
+        constraintHeightFilterCollectionView.constant = filtersActive ? 0 : 60
+        if !filtersActive {
+            filterCollectionView.reloadData()
+        }
+        
+        filtersActive = !filtersActive
+        
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    // MARK: Constraints
+    
+    @IBOutlet weak var constraintHeightFilterCollectionView: NSLayoutConstraint!
     
     // MARK: Private Methods
+    
+    private func setImage(image: UIImage) {
+        imageView.image = image
+        ThumbnailGenerator.generateThumbnailForImage(image, size: 30) { (thumbnailImage) -> Void in
+            self.thumbnailFiltersOriginal = thumbnailImage
+            if self.filtersActive {
+                self.filterCollectionView.reloadData()
+            }
+        }
+    }
     
     private func showPickerViewWithSourceType(type: UIImagePickerControllerSourceType) {
         if !UIImagePickerController.isSourceTypeAvailable(type) {
@@ -80,12 +113,11 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         if let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            imageView.image = selectedImage
+            setImage(selectedImage)
         }
         else if let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            imageView.image = selectedImage
+            setImage(selectedImage)
         }
-        
     }
     
     // MARK: GalleryViewControllerDelegate Methods
@@ -95,7 +127,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             let image = UIImage(contentsOfFile: selectedImagePath)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.imageView.image = image
+                self.setImage(image)
             })
         })
     }
@@ -104,6 +136,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as FilterCell
+        cell.imageView.image = imageView.image
+        
         return cell
     }
     
