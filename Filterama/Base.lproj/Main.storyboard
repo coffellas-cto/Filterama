@@ -77,7 +77,7 @@
                                 </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
-                                <color key="backgroundColor" red="0.046018016580000001" green="0.026375861970000001" blue="0.003886797867" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.094487404339999997" green="0.054012396179999998" blue="0.0086703308520000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" id="gF4-J9-vad"/>
                                 </constraints>
@@ -130,7 +130,7 @@
                             <constraint firstAttribute="centerX" secondItem="mhc-n5-Bat" secondAttribute="centerX" id="dIq-x6-EYu"/>
                             <constraint firstAttribute="centerX" secondItem="i8F-7w-qJN" secondAttribute="centerX" id="ecl-4m-9ti"/>
                             <constraint firstItem="mhc-n5-Bat" firstAttribute="top" secondItem="tgQ-ke-nMv" secondAttribute="bottom" constant="8" id="ldN-a8-ZSY"/>
-                            <constraint firstItem="dmY-qO-8jc" firstAttribute="top" secondItem="rFg-nI-sOt" secondAttribute="bottom" constant="8" id="tVG-7v-ONA"/>
+                            <constraint firstItem="dmY-qO-8jc" firstAttribute="top" secondItem="rFg-nI-sOt" secondAttribute="bottom" id="tVG-7v-ONA"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>

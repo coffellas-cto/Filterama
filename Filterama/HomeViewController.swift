@@ -10,6 +10,9 @@ import UIKit
 import CoreImage
 import CoreData
 
+let kFilterThumbnailGenerationOptionKeyImagePath = "imagePath"
+let kFilterThumbnailGenerationOptionKeyImage = "image"
+
 class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: Private Properties
@@ -82,21 +85,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // MARK: Private Methods
     
-    private func setImage(image: UIImage) {
-        imageView.image = image
-        thumbnailFiltersOriginal = nil
-        if self.filtersActive {
-            self.filterCollectionView.reloadData()
-        }
-        
-        ThumbnailGenerator.generateThumbnailForImage(image, size: 60) { (thumbnailImage) -> Void in
-            self.thumbnailFiltersOriginal = thumbnailImage
-            if self.filtersActive {
-                self.filterCollectionView.reloadData()
-            }
-        }
-    }
-    
     private func showPickerViewWithSourceType(type: UIImagePickerControllerSourceType) {
         if !UIImagePickerController.isSourceTypeAvailable(type) {
             self.showAlertForUnexistingSourceType(type)
@@ -123,15 +111,49 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         UIAlertView(title: "Error", message: "\(typeString) source is not available", delegate: nil, cancelButtonTitle: "OK").show()
     }
     
+    private func generateFilterThumbnailWithOptions(options: NSDictionary) {
+        thumbnailFiltersOriginal = nil
+        if self.filtersActive {
+            self.filterCollectionView.reloadData()
+        }
+        
+        var completionFunction = { (thumbnailImage: UIImage?) -> Void in
+            self.thumbnailFiltersOriginal = thumbnailImage
+            if self.filtersActive {
+                self.filterCollectionView.reloadData()
+            }
+        }
+        
+        if let imagePath = options[kFilterThumbnailGenerationOptionKeyImagePath] as? String {
+            ThumbnailGenerator.generateThumbnailFromFileAtPath(imagePath, size: 60) { (thumbnailImage) -> Void in
+                completionFunction(thumbnailImage)
+            }
+        }
+        else if let image = options[kFilterThumbnailGenerationOptionKeyImage] as? UIImage {
+            ThumbnailGenerator.generateThumbnailForImage(image, size: 60, completion: { (thumbnailImage) -> Void in
+                completionFunction(thumbnailImage)
+            })
+        }
+    }
+    
     // MARK: UIImagePickerControllerDelegate Methods
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
-        if let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            setImage(selectedImage)
+        var selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage
+        if selectedImage == nil {
+            selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
         }
-        else if let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            setImage(selectedImage)
+        
+        if selectedImage == nil {
+            println("Error. Couldn't load image from UIImagePickerController")
+            return
+        }
+        
+        generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: selectedImage!])
+        
+        ThumbnailGenerator.generateThumbnailForImage(selectedImage, size: self.imageView.frame.width) { (thumbnailImage) -> Void in
+            self.imageView.image = selectedImage
         }
     }
     
@@ -139,12 +161,11 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String) {
         galleryVC.dismissViewControllerAnimated(true, completion: nil)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let image = UIImage(contentsOfFile: selectedImagePath)
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.setImage(image)
-            })
+        ThumbnailGenerator.generateThumbnailFromFileAtPath(selectedImagePath, size: self.imageView.frame.width, completion: { (thumbnailImage) -> Void in
+            self.imageView.image = thumbnailImage
         })
+        
+        generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImagePath: selectedImagePath])
     }
     
     // MARK: UICollectionView Delegates Methods
@@ -184,16 +205,5 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
