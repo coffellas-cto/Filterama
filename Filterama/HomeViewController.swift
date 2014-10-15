@@ -19,6 +19,11 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private var innerGalleryVC: GalleryViewController?
     private var filtersActive = false
     private var thumbnailFiltersOriginal: UIImage?
+    private var thumbnailFiltersArray: [UIImage]?
+    lazy var graphicsContext: CIContext! = {
+        return CIContext(EAGLContext: EAGLContext(API: EAGLRenderingAPI.OpenGLES2), options: [kCIContextWorkingColorSpace: NSNull()])
+        }()
+    
     lazy private var fetchedResultsControllerFilters: NSFetchedResultsController! = {
         var request = NSFetchRequest(entityName: "Filter")
         request.sortDescriptors = [NSSortDescriptor(key: "idx", ascending: true)]
@@ -26,6 +31,17 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         var error: NSError?
         retVal.performFetch(&error)
         assert(error == nil, "\(error?.localizedDescription)")
+        return retVal
+    }()
+    
+    lazy private var filtersArray: [CIFilter]! = {
+        var retVal = [CIFilter]()
+        for filterManagedObject in self.fetchedResultsControllerFilters.fetchedObjects! as [Filter] {
+            var curFilter = CIFilter(name: filterManagedObject.name)
+            curFilter.setDefaults()
+            retVal.append(curFilter)
+        }
+        
         return retVal
     }()
     
@@ -114,12 +130,15 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     private func generateFilterThumbnailWithOptions(options: NSDictionary) {
         thumbnailFiltersOriginal = nil
+        thumbnailFiltersArray = [UIImage]()
+        
         if self.filtersActive {
             self.filterCollectionView.reloadData()
         }
         
         var completionFunction = { (thumbnailImage: UIImage?) -> Void in
             self.thumbnailFiltersOriginal = thumbnailImage
+            
             if self.filtersActive {
                 self.filterCollectionView.reloadData()
             }
@@ -177,10 +196,38 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as FilterCell
-        cell.imageView.image = thumbnailFiltersOriginal
         
         let filter = fetchedResultsControllerFilters?.objectAtIndexPath(indexPath) as Filter
         cell.titleLabel.text = filter.friendlyName
+        
+        if let thumbnailFiltersArray = thumbnailFiltersArray {
+            if thumbnailFiltersArray.count <= indexPath.row {
+                cell.imageView.image = thumbnailFiltersOriginal
+                if thumbnailFiltersOriginal != nil {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                        var image = CIImage(image: self.thumbnailFiltersOriginal)
+                        var imageFilter = self.filtersArray[indexPath.row]
+                        imageFilter.setValue(image, forKey: kCIInputImageKey)
+                        
+                        // Generate the results
+                        let result = imageFilter.valueForKey(kCIOutputImageKey) as CIImage
+                        let imageRef = self.graphicsContext.createCGImage(result, fromRect: result.extent())
+                        let filteredImage = UIImage(CGImage: imageRef)
+                        self.thumbnailFiltersArray!.append(filteredImage)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            collectionView.reloadItemsAtIndexPaths([indexPath])
+                        })
+                    })
+                }
+            }
+            else {
+                cell.imageView.image = thumbnailFiltersArray[indexPath.row]
+            }
+        }
+        else {
+            cell.imageView.image = thumbnailFiltersOriginal
+        }
+        
         
         return cell
     }
