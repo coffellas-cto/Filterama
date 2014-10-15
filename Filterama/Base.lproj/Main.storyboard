@@ -76,14 +76,14 @@
                                     <action selector="showFilters:" destination="fie-jw-KR9" eventType="touchUpInside" id="HEy-Me-5TT"/>
                                 </connections>
                             </button>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
                                 <color key="backgroundColor" red="0.046018016580000001" green="0.026375861970000001" blue="0.003886797867" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" id="gF4-J9-vad"/>
                                 </constraints>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="8" id="pq5-Rh-839">
-                                    <size key="itemSize" width="60" height="60"/>
+                                    <size key="itemSize" width="74" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
@@ -96,14 +96,25 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YgM-n0-Wtz">
-                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                    <rect key="frame" x="7" y="8" width="60" height="60"/>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhd-8D-1f1">
+                                                    <rect key="frame" x="-17" y="-25" width="34" height="17"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstAttribute="centerX" secondItem="dhd-8D-1f1" secondAttribute="centerX" id="49U-a3-TU8"/>
+                                            <constraint firstAttribute="bottom" secondItem="dhd-8D-1f1" secondAttribute="bottom" constant="8" id="T2m-aw-9ph"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="YgM-n0-Wtz" id="ofs-P1-jFg"/>
+                                            <outlet property="titleLabel" destination="dhd-8D-1f1" id="BnM-r4-gSZ"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -133,7 +144,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6aB-j9-Mf8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-591" y="263"/>
+            <point key="canvasLocation" x="-591" y="273"/>
         </scene>
         <!--Gallery View Controller-->
         <scene sceneID="xVa-Xj-S6e">

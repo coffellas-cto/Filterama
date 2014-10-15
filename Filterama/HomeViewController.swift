@@ -64,7 +64,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     @IBAction func showFilters(sender: AnyObject) {
         showFiltersButton.setTitle(filtersActive ? "Show filters" : "Hide filters", forState: .Normal)
-        constraintHeightFilterCollectionView.constant = filtersActive ? 0 : 60
+        constraintHeightFilterCollectionView.constant = filtersActive ? 0 : 100
         if !filtersActive {
             filterCollectionView.reloadData()
         }
@@ -84,7 +84,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     private func setImage(image: UIImage) {
         imageView.image = image
-        ThumbnailGenerator.generateThumbnailForImage(image, size: 30) { (thumbnailImage) -> Void in
+        thumbnailFiltersOriginal = nil
+        if self.filtersActive {
+            self.filterCollectionView.reloadData()
+        }
+        
+        ThumbnailGenerator.generateThumbnailForImage(image, size: 60) { (thumbnailImage) -> Void in
             self.thumbnailFiltersOriginal = thumbnailImage
             if self.filtersActive {
                 self.filterCollectionView.reloadData()
@@ -146,9 +151,10 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as FilterCell
-        cell.imageView.image = imageView.image
+        cell.imageView.image = thumbnailFiltersOriginal
         
         let filter = fetchedResultsControllerFilters?.objectAtIndexPath(indexPath) as Filter
+        cell.titleLabel.text = filter.friendlyName
         
         return cell
     }
