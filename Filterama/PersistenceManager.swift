@@ -85,10 +85,6 @@ class PersistenceManager {
     
     // MARK: Public Methods
     
-    func fetchFilters() -> [Filter]? {
-        return fetchObjectsWithEntityName("Filter") as? [Filter]
-    }
-    
     func populateFilters() {
         for i: Int16 in 0..<2 {
             var newFilter = NSEntityDescription.insertNewObjectForEntityForName("Filter", inManagedObjectContext: managedObjectContext) as Filter
