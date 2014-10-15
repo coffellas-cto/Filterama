@@ -67,7 +67,27 @@ class PersistenceManager {
         return managedObjectContext
         }()
     
+    // MARK: Private Methods
+    private func fetchObjectsWithEntityName(name: String, predicate: NSPredicate? = nil) -> [AnyObject]? {
+        var request = NSFetchRequest(entityName: name)
+        if predicate != nil {
+            request.predicate = predicate
+        }
+        var error: NSError?
+        var retVal = managedObjectContext.executeFetchRequest(request, error: &error)
+        if error == nil {
+            return retVal
+        }
+        
+        println(error?.localizedDescription)
+        return nil
+    }
+    
     // MARK: Public Methods
+    
+    func fetchFilters() -> [Filter]? {
+        return fetchObjectsWithEntityName("Filter") as? [Filter]
+    }
     
     func populateFilters() {
         for i in 0..<2 {
