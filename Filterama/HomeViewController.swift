@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreImage
+import CoreData
 
 class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -15,6 +16,15 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private var innerGalleryVC: GalleryViewController?
     private var filtersActive = false
     private var thumbnailFiltersOriginal: UIImage?
+    lazy private var fetchedResultsControllerFilters: NSFetchedResultsController! = {
+        var request = NSFetchRequest(entityName: "Filter")
+        request.sortDescriptors = [NSSortDescriptor(key: "idx", ascending: true)]
+        var retVal = NSFetchedResultsController(fetchRequest: request, managedObjectContext: PersistenceManager.manager.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        var error: NSError?
+        retVal.performFetch(&error)
+        assert(error == nil, "\(error?.localizedDescription)")
+        return retVal
+    }()
     
     // MARK: IBOutlets
     @IBOutlet weak var filterCollectionView: UICollectionView!
@@ -138,11 +148,13 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as FilterCell
         cell.imageView.image = imageView.image
         
+        let filter = fetchedResultsControllerFilters?.objectAtIndexPath(indexPath) as Filter
+        
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return fetchedResultsControllerFilters.fetchedObjects!.count
     }
     
     
