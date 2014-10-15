@@ -96,8 +96,10 @@ class PersistenceManager {
             switch i {
             case 0:
                 newFilter.name = "CISepiaTone"
+                newFilter.friendlyName = "Sepia"
             case 1:
                 newFilter.name = "CIGaussianBlur"
+                newFilter.friendlyName = "Blur"
             default:
                 break
             }

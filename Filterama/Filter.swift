@@ -13,5 +13,5 @@ class Filter: NSManagedObject {
 
     @NSManaged var name: String
     @NSManaged var favourited: Bool
-
+    @NSManaged var friendlyName: String
 }
