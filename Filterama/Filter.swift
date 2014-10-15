@@ -13,5 +13,6 @@ class Filter: NSManagedObject {
 
     @NSManaged var name: String
     @NSManaged var favourited: Bool
+    @NSManaged var idx: Int16
     @NSManaged var friendlyName: String
 }

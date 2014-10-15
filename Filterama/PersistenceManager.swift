@@ -90,8 +90,9 @@ class PersistenceManager {
     }
     
     func populateFilters() {
-        for i in 0..<2 {
+        for i: Int16 in 0..<2 {
             var newFilter = NSEntityDescription.insertNewObjectForEntityForName("Filter", inManagedObjectContext: managedObjectContext) as Filter
+            newFilter.idx = i
             
             switch i {
             case 0:

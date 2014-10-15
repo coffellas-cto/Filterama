@@ -3,9 +3,10 @@
     <entity name="Filter" representedClassName="Filterama.Filter" syncable="YES">
         <attribute name="favourited" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="friendlyName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="idx" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Filter" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="Filter" positionX="-63" positionY="-18" width="128" height="105"/>
     </elements>
 </model>
