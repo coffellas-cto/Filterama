@@ -119,15 +119,23 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="exV-0j-001">
+                                <rect key="frame" x="101" y="28" width="398" height="398"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.094487404336734748" green="0.054012396177231914" blue="0.0086703308518159584" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="i8F-7w-qJN" firstAttribute="top" secondItem="mhc-n5-Bat" secondAttribute="bottom" constant="36" id="9T7-TI-NCr"/>
                             <constraint firstAttribute="centerX" secondItem="KIK-63-GrA" secondAttribute="centerX" id="DAK-6l-eTM"/>
                             <constraint firstItem="KIK-63-GrA" firstAttribute="top" secondItem="mhc-n5-Bat" secondAttribute="bottom" constant="8" symbolic="YES" id="EsS-2h-Pzd"/>
+                            <constraint firstItem="exV-0j-001" firstAttribute="top" secondItem="tgQ-ke-nMv" secondAttribute="bottom" constant="8" id="LWt-KA-HkT"/>
+                            <constraint firstItem="exV-0j-001" firstAttribute="width" secondItem="mhc-n5-Bat" secondAttribute="width" id="PuG-ER-wHx"/>
                             <constraint firstItem="rFg-nI-sOt" firstAttribute="leading" secondItem="0Bg-Np-K5s" secondAttribute="leading" id="Q8c-zb-Rkv"/>
                             <constraint firstAttribute="trailing" secondItem="rFg-nI-sOt" secondAttribute="trailing" id="ZYV-AA-lnm"/>
+                            <constraint firstAttribute="centerX" secondItem="exV-0j-001" secondAttribute="centerX" id="bGb-v7-OMW"/>
                             <constraint firstAttribute="centerX" secondItem="mhc-n5-Bat" secondAttribute="centerX" id="dIq-x6-EYu"/>
+                            <constraint firstItem="exV-0j-001" firstAttribute="height" secondItem="mhc-n5-Bat" secondAttribute="height" id="eXW-vB-Ap3"/>
                             <constraint firstAttribute="centerX" secondItem="i8F-7w-qJN" secondAttribute="centerX" id="ecl-4m-9ti"/>
                             <constraint firstItem="mhc-n5-Bat" firstAttribute="top" secondItem="tgQ-ke-nMv" secondAttribute="bottom" constant="8" id="ldN-a8-ZSY"/>
                             <constraint firstItem="dmY-qO-8jc" firstAttribute="top" secondItem="rFg-nI-sOt" secondAttribute="bottom" id="tVG-7v-ONA"/>
@@ -135,6 +143,7 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="activityIndicatorImage" destination="exV-0j-001" id="Ste-W1-xBK"/>
                         <outlet property="constraintHeightFilterCollectionView" destination="gF4-J9-vad" id="eWy-Zr-awf"/>
                         <outlet property="filterCollectionView" destination="rFg-nI-sOt" id="qwa-Mz-Q5e"/>
                         <outlet property="imageView" destination="mhc-n5-Bat" id="tg6-9I-iGM"/>

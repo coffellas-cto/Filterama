@@ -34,6 +34,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadButton: UIButton!
     @IBOutlet weak var showFiltersButton: UIButton!
+    @IBOutlet weak var activityIndicatorImage: UIActivityIndicatorView!
     
     // MARK: IBActions
     
@@ -139,6 +140,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: UIImagePickerControllerDelegate Methods
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        activityIndicatorImage.startAnimating()
         picker.dismissViewControllerAnimated(true, completion: nil)
         var selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage
         if selectedImage == nil {
@@ -154,15 +156,18 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         ThumbnailGenerator.generateThumbnailForImage(selectedImage, size: self.imageView.frame.width) { (thumbnailImage) -> Void in
             self.imageView.image = selectedImage
+            self.activityIndicatorImage.stopAnimating()
         }
     }
     
     // MARK: GalleryViewControllerDelegate Methods
     
     func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String) {
+        activityIndicatorImage.startAnimating()
         galleryVC.dismissViewControllerAnimated(true, completion: nil)
         ThumbnailGenerator.generateThumbnailFromFileAtPath(selectedImagePath, size: self.imageView.frame.width, completion: { (thumbnailImage) -> Void in
             self.imageView.image = thumbnailImage
+            self.activityIndicatorImage.stopAnimating()
         })
         
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImagePath: selectedImagePath])
@@ -200,6 +205,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func viewDidLayoutSubviews() {
         imageView.layer.cornerRadius = imageView.frame.width / 2
+        activityIndicatorImage.layer.cornerRadius = imageView.layer.cornerRadius
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
