@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class ThumbnailGenerator {
-    class func generateThumbnailForImage(image: UIImage?, var size: Int, completion: (thumbnailImage: UIImage?) -> Void) {
+    class func generateThumbnailForImage(image: UIImage?, var size: CGFloat, completion: (thumbnailImage: UIImage?) -> Void) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             let data = UIImagePNGRepresentation(image)
             self.generateThumbnailFromData(data, size: size, completion: { (thumbnailImage) -> Void in
@@ -19,7 +19,7 @@ class ThumbnailGenerator {
         })
     }
     
-    class func generateThumbnailFromFileAtPath(path: String?, var size: Int, completion: (thumbnailImage: UIImage?) -> Void) {
+    class func generateThumbnailFromFileAtPath(path: String?, var size: CGFloat, completion: (thumbnailImage: UIImage?) -> Void) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             if let path = path {
                 let data = NSData(contentsOfFile: path)
@@ -35,10 +35,11 @@ class ThumbnailGenerator {
         })
     }
     
-    class func generateThumbnailFromData(imageData: NSData?, var size: Int, completion: (thumbnailImage: UIImage?) -> Void) {
+    class func generateThumbnailFromData(imageData: NSData?, var size: CGFloat, completion: (thumbnailImage: UIImage?) -> Void) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             if imageData != nil {
-                size *= Int(Float(UIScreen.mainScreen().scale))
+                let scale = UIScreen.mainScreen().scale
+                size *= scale
                 if let thumbnailImageRef = UIImage.createThumbnailImageFromData(imageData, size: size) {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         let image = UIImage(CGImage: thumbnailImageRef.takeUnretainedValue())

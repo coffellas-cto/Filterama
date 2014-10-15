@@ -10,6 +10,6 @@
 
 @interface UIImage (Filterama)
 
-+ (CGImageRef)createThumbnailImageFromData:(NSData *)data size:(NSNumber *)imageSizeNumber;
++ (CGImageRef)createThumbnailImageFromData:(NSData *)data size:(CGFloat)imageSize;
 
 @end

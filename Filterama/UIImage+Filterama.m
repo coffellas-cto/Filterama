@@ -11,7 +11,7 @@
 
 @implementation UIImage (Filterama)
 
-+ (CGImageRef)createThumbnailImageFromData:(NSData *)data size:(NSNumber *)imageSizeNumber
++ (CGImageRef)createThumbnailImageFromData:(NSData *)data size:(CGFloat)imageSize
 {
     CGImageRef        thumbnailImage = NULL;
     CGImageSourceRef  imageSource;
@@ -19,7 +19,6 @@
     CFStringRef       keys[3];
     CFTypeRef         values[3];
     CFNumberRef       thumbnailSize;
-    NSInteger imageSize = [imageSizeNumber integerValue];
     
     //NSLog(@"%ld\n", (long)imageSize);
     
@@ -31,9 +30,20 @@
         return  NULL;
     }
     
+    // Get image proportion
+    NSDictionary *props = (__bridge NSDictionary*) CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+    CGSize imageSizeOriginal = CGSizeMake([props[@"PixelWidth"] floatValue], [props[@"PixelHeight"] floatValue]);
+    CGFloat multiplier;
+    if (imageSizeOriginal.width > imageSizeOriginal.height)
+        multiplier = imageSizeOriginal.width / imageSizeOriginal.height;
+    else
+        multiplier = imageSizeOriginal.height / imageSizeOriginal.width;
+    
+    imageSize *= multiplier;
+    
     // Package the integer as a  CFNumber object. Using CFTypes allows you
     // to more easily create the options dictionary later.
-    thumbnailSize = CFNumberCreate(NULL, kCFNumberIntType, &imageSize);
+    thumbnailSize = CFNumberCreate(NULL, kCFNumberCGFloatType, &imageSize);
     //NSLog(@"%@\n", thumbnailSize);
     
     // Set up the thumbnail options.
