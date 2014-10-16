@@ -188,7 +188,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFP-Fw-912">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aFP-Fw-912">
                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                                     <color key="backgroundColor" red="0.50413797670000005" green="0.49791405109999998" blue="0.49791405109999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 </imageView>
@@ -201,8 +201,12 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="aFP-Fw-912" firstAttribute="top" secondItem="LCo-JM-0hJ" secondAttribute="top" id="8eG-G1-23U"/>
+                                            <constraint firstAttribute="bottom" secondItem="aFP-Fw-912" secondAttribute="bottom" id="FRZ-M5-aca"/>
                                             <constraint firstAttribute="centerY" secondItem="jWv-uH-eD4" secondAttribute="centerY" id="WUx-lj-xth"/>
                                             <constraint firstAttribute="centerX" secondItem="jWv-uH-eD4" secondAttribute="centerX" id="Xw4-Yy-RRq"/>
+                                            <constraint firstItem="aFP-Fw-912" firstAttribute="leading" secondItem="LCo-JM-0hJ" secondAttribute="leading" id="b0O-Rt-ACl"/>
+                                            <constraint firstAttribute="trailing" secondItem="aFP-Fw-912" secondAttribute="trailing" id="b7d-u9-MpW"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="activityIndicator" destination="jWv-uH-eD4" id="zTY-cw-u8F"/>
@@ -217,11 +221,17 @@
                                     <constraint firstAttribute="height" constant="64" id="Dsx-9U-Ma6"/>
                                 </constraints>
                                 <items>
-                                    <navigationItem id="lFn-i6-lws"/>
+                                    <navigationItem id="lFn-i6-lws">
+                                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="Qnx-hc-SpZ">
+                                            <connections>
+                                                <action selector="cancel:" destination="tpC-29-M0M" id="UqM-uF-O0O"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.094487404339999997" green="0.054012396179999998" blue="0.0086703308520000005" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="2h8-x8-Kbi" firstAttribute="top" secondItem="7xc-hs-nOr" secondAttribute="top" id="6nv-pU-MAH"/>
                             <constraint firstAttribute="centerX" secondItem="b65-a2-pg5" secondAttribute="centerX" id="9ea-5O-KEV"/>
