@@ -11,7 +11,7 @@
 
 @implementation UIImage (Filterama)
 
-+ (CGImageRef)createThumbnailImageFromData:(NSData *)data size:(CGFloat)imageSize
++ (CGImageRef)newThumbnailImageFromData:(NSData *)data size:(CGFloat)imageSize
 {
     CGImageRef        thumbnailImage = NULL;
     CGImageSourceRef  imageSource;
@@ -31,8 +31,11 @@
     }
     
     // Get image proportion
-    NSDictionary *props = (__bridge NSDictionary*) CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
-    CGSize imageSizeOriginal = CGSizeMake([props[@"PixelWidth"] floatValue], [props[@"PixelHeight"] floatValue]);
+    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+    NSNumber *width = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+    NSNumber *height = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+    CGSize imageSizeOriginal = CGSizeMake([width floatValue], [height floatValue]);
+    CFRelease(imageProperties);
     CGFloat multiplier;
     if (imageSizeOriginal.width > imageSizeOriginal.height)
         multiplier = imageSizeOriginal.width / imageSizeOriginal.height;
