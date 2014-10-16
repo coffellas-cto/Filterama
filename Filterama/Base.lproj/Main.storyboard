@@ -155,10 +155,10 @@
             </objects>
             <point key="canvasLocation" x="-591" y="273"/>
         </scene>
-        <!--Gallery View Controller-->
+        <!--Picker View Controller-->
         <scene sceneID="xVa-Xj-S6e">
             <objects>
-                <viewController storyboardIdentifier="GALLERY_VC" id="tpC-29-M0M" customClass="GalleryViewController" customModule="Filterama" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GALLERY_VC" id="tpC-29-M0M" customClass="PickerViewController" customModule="Filterama" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="M1R-AE-ApQ"/>
                         <viewControllerLayoutGuide type="bottom" id="xEt-Wa-L3e"/>

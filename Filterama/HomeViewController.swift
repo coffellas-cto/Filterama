@@ -13,10 +13,10 @@ import CoreData
 let kFilterThumbnailGenerationOptionKeyImagePath = "imagePath"
 let kFilterThumbnailGenerationOptionKeyImage = "image"
 
-class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GalleryViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PickerViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: Private Properties
-    private var innerGalleryVC: GalleryViewController?
+    private var innerGalleryVC: PickerViewController?
     private var filtersActive = false
     private var mainImageOriginal: UIImage?
     private var thumbnailFilterImageOriginal: UIImage?
@@ -57,7 +57,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Filterama Pictures", style: .Default, handler: { (action) -> Void in
             if self.innerGalleryVC == nil {
-                self.innerGalleryVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("GALLERY_VC") as? GalleryViewController
+                self.innerGalleryVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("GALLERY_VC") as? PickerViewController
                 self.innerGalleryVC?.delegate = self
             }
             self.presentViewController(self.innerGalleryVC!, animated: true, completion: nil)
@@ -198,9 +198,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    // MARK: GalleryViewControllerDelegate Methods
+    // MARK: PickerViewControllerDelegate Methods
     
-    func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String) {
+    func galleryVC(galleryVC: PickerViewController, selectedImagePath: String) {
         activityIndicatorImage.startAnimating()
         galleryVC.dismissViewControllerAnimated(true, completion: nil)
         ThumbnailGenerator.generateThumbnailFromFileAtPath(selectedImagePath, size: self.imageView.frame.width, completion: { (thumbnailImage) -> Void in

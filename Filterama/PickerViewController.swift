@@ -1,5 +1,5 @@
 //
-//  GalleryViewController.swift
+//  PickerViewController.swift
 //  Filterama
 //
 //  Created by Alex G on 13.10.14.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol GalleryViewControllerDelegate : NSObjectProtocol {
-    func galleryVC(galleryVC: GalleryViewController, selectedImagePath: String)
+protocol PickerViewControllerDelegate : NSObjectProtocol {
+    func galleryVC(galleryVC: PickerViewController, selectedImagePath: String)
 }
 
-class GalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class PickerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    weak var delegate: GalleryViewControllerDelegate?
+    weak var delegate: PickerViewControllerDelegate?
     var imagesPathsArray = NSArray()
 
     @IBOutlet weak var collection: UICollectionView!
