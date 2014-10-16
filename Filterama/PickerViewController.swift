@@ -12,14 +12,22 @@ protocol PickerViewControllerDelegate : NSObjectProtocol {
     func galleryVC(galleryVC: PickerViewController, selectedImagePath: String)
 }
 
+enum PickerViewControllerMode {
+    case Documents
+    case PhotosFramework
+}
+
 class PickerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     weak var delegate: PickerViewControllerDelegate?
-    var imagesPathsArray = NSArray()
+    var mode: PickerViewControllerMode = .Documents
+    private var imagesPathsArray = NSArray()
 
     @IBOutlet weak var collection: UICollectionView!
-    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBAction func cancel(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
     // MARK: Private Methods
     
     private func documentsFilePaths() -> NSArray {
@@ -34,6 +42,22 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         return retVal.filteredArrayUsingPredicate(NSPredicate(format: "pathExtension IN %@", ["jpg", "jpeg", "png", "tiff", "bmp"]))
+    }
+    
+    private func fetchSource() {
+        activityIndicator.startAnimating()
+        if mode == .Documents {
+            imagesPathsArray = documentsFilePaths()
+        }
+        collection.reloadData()
+        activityIndicator.stopAnimating()
+    }
+    
+    // MARK: Public Methods
+    
+    func refreshSource(sender: UIRefreshControl) {
+        fetchSource()
+        sender.endRefreshing()
     }
     
     // MARK: UICollectionView Delegates Methods
@@ -70,6 +94,13 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
         // Do any additional setup after loading the view.
         collection.dataSource = self
         collection.delegate = self
+        collection.alwaysBounceVertical = true
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.whiteColor()
+        refreshControl.addTarget(self, action: "refreshSource:", forControlEvents: .ValueChanged)
+        collection.addSubview(refreshControl)
+        
+        fetchSource()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -78,15 +109,10 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        activityIndicator.startAnimating()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        imagesPathsArray = documentsFilePaths()
-        collection.reloadData()
-        activityIndicator.stopAnimating()
     }
     
     override func didReceiveMemoryWarning() {
