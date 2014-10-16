@@ -18,6 +18,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: Private Properties
     private var innerGalleryVC: GalleryViewController?
     private var filtersActive = false
+    private var mainImageOriginal: UIImage?
     private var thumbnailFilterImageOriginal: UIImage?
     private var thumbnailFilterImages = [Int: UIImage]()
     private var coreImageContext: CIContext!
@@ -169,6 +170,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         return image
     }
     
+    private func setMainImage(image: UIImage?) {
+        self.mainImageOriginal = image
+        self.imageView.image = image
+        self.activityIndicatorImage.stopAnimating()
+    }
+    
     // MARK: UIImagePickerControllerDelegate Methods
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
@@ -187,8 +194,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: selectedImage!])
         
         ThumbnailGenerator.generateThumbnailForImage(selectedImage, size: self.imageView.frame.width) { (thumbnailImage) -> Void in
-            self.imageView.image = selectedImage
-            self.activityIndicatorImage.stopAnimating()
+            self.setMainImage(thumbnailImage)
         }
     }
     
@@ -198,8 +204,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         activityIndicatorImage.startAnimating()
         galleryVC.dismissViewControllerAnimated(true, completion: nil)
         ThumbnailGenerator.generateThumbnailFromFileAtPath(selectedImagePath, size: self.imageView.frame.width, completion: { (thumbnailImage) -> Void in
-            self.imageView.image = thumbnailImage
-            self.activityIndicatorImage.stopAnimating()
+            self.setMainImage(thumbnailImage)
         })
         
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImagePath: selectedImagePath])
@@ -243,6 +248,19 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         return fetchedResultsControllerFilters.fetchedObjects!.count
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+        activityIndicatorImage.startAnimating()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            let filteredImage = self.filteredImageWithFilter(self.filtersArray[indexPath.row], image: self.mainImageOriginal)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if filteredImage != nil {
+                    self.imageView.image = filteredImage
+                }
+                self.activityIndicatorImage.stopAnimating()
+            })
+        })
+    }
     
     // MARK: UIViewController Life Cycle
     
