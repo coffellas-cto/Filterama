@@ -14,6 +14,6 @@ class GalleryCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        imageView.layer.cornerRadius = imageView.frame.width / 2
+        self.layer.cornerRadius = self.frame.width / 2
     }
 }

@@ -220,6 +220,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="Dsx-9U-Ma6"/>
                                 </constraints>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.20836654974489799" green="0.086196176014608036" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
                                     <navigationItem id="lFn-i6-lws">
                                         <barButtonItem key="rightBarButtonItem" title="Cancel" id="Qnx-hc-SpZ">
@@ -246,6 +248,7 @@
                             <constraint firstAttribute="width" secondItem="wjo-8C-TUa" secondAttribute="width" id="z2l-l8-nCw"/>
                         </constraints>
                     </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="activityIndicator" destination="b65-a2-pg5" id="Rr5-OH-bev"/>
                         <outlet property="collection" destination="wjo-8C-TUa" id="Pc1-b1-oDb"/>

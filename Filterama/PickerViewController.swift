@@ -60,6 +60,28 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
         sender.endRefreshing()
     }
     
+    func pinched(gesture: UIPinchGestureRecognizer) {
+        if gesture.state == .Ended {
+            let multiplier: CGFloat = gesture.velocity > 0 ? 2.0 : 0.5
+            
+            let layout = collection.collectionViewLayout as UICollectionViewFlowLayout
+            let sideSize = layout.itemSize.width * multiplier
+            if (sideSize > 20) && (sideSize < 300) {
+                layout.invalidateLayout()
+                layout.itemSize = CGSize(width: layout.itemSize.width * multiplier, height: layout.itemSize.height * multiplier)
+                collection.collectionViewLayout = layout
+                
+                collection.performBatchUpdates({ () -> Void in
+                    UIView.setAnimationsEnabled(false)
+                    // Need to reload data, so new thumbnail is applied
+                    self.collection.reloadSections(NSIndexSet(index: 0))
+                }, completion: { (completed) -> Void in
+                    UIView.setAnimationsEnabled(true)
+                })
+            }
+        }
+    }
+    
     // MARK: UICollectionView Delegates Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -71,7 +93,7 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
         cell.imageView.image = nil
         cell.activityIndicator.startAnimating()
         
-        ThumbnailGenerator.generateThumbnailFromFileAtPath(self.imagesPathsArray[indexPath.row] as? String, size: 64) { (thumbnailImage) -> Void in
+        ThumbnailGenerator.generateThumbnailFromFileAtPath(self.imagesPathsArray[indexPath.row] as? String, size: cell.imageView.frame.width) { (thumbnailImage) -> Void in
             if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
                 cell.imageView.image = thumbnailImage
             }
@@ -100,6 +122,8 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
         refreshControl.addTarget(self, action: "refreshSource:", forControlEvents: .ValueChanged)
         collection.addSubview(refreshControl)
         
+        collection.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: "pinched:"))
+        
         fetchSource()
     }
     
@@ -118,6 +142,10 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
 
 }
