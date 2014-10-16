@@ -40,7 +40,7 @@ class ThumbnailGenerator {
             if imageData != nil {
                 let scale = UIScreen.mainScreen().scale
                 size *= scale
-                if let thumbnailImageRef = UIImage.createThumbnailImageFromData(imageData, size: size) {
+                if let thumbnailImageRef = UIImage.newThumbnailImageFromData(imageData, size: size) {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         let image = UIImage(CGImage: thumbnailImageRef.takeUnretainedValue())
                         //println(image.size.width)

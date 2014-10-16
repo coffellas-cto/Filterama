@@ -86,7 +86,7 @@ class PersistenceManager {
     // MARK: Public Methods
     
     func populateFilters() {
-        for i: Int16 in 0..<2 {
+        for i: Int16 in 0..<10 {
             var newFilter = NSEntityDescription.insertNewObjectForEntityForName("Filter", inManagedObjectContext: managedObjectContext) as Filter
             newFilter.idx = i
             
@@ -97,6 +97,30 @@ class PersistenceManager {
             case 1:
                 newFilter.name = "CIGaussianBlur"
                 newFilter.friendlyName = "Blur"
+            case 2:
+                newFilter.name = "CIPixellate"
+                newFilter.friendlyName = "Pixellate"
+            case 3:
+                newFilter.name = "CIGammaAdjust"
+                newFilter.friendlyName = "Gamma"
+            case 4:
+                newFilter.name = "CIExposureAdjust"
+                newFilter.friendlyName = "Exposure"
+            case 5:
+                newFilter.name = "CIPhotoEffectChrome"
+                newFilter.friendlyName = "Chrome"
+            case 6:
+                newFilter.name = "CIPhotoEffectMono"
+                newFilter.friendlyName = "Mono"
+            case 7:
+                newFilter.name = "CIPhotoEffectNoir"
+                newFilter.friendlyName = "Noir"
+            case 8:
+                newFilter.name = "CIPhotoEffectTonal"
+                newFilter.friendlyName = "Tonal"
+            case 9:
+                newFilter.name = "CIPhotoEffectTransfer"
+                newFilter.friendlyName = "Transfer"
             default:
                 break
             }

@@ -18,12 +18,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: Private Properties
     private var innerGalleryVC: GalleryViewController?
     private var filtersActive = false
-    private var thumbnailFiltersOriginal: UIImage?
-    private var thumbnailFiltersArray: [UIImage]?
-    lazy var graphicsContext: CIContext! = {
-        return CIContext(EAGLContext: EAGLContext(API: EAGLRenderingAPI.OpenGLES2), options: [kCIContextWorkingColorSpace: NSNull()])
-        }()
-    
+    private var thumbnailFilterImageOriginal: UIImage?
+    private var thumbnailFilterImages = [Int: UIImage]()
+    private var coreImageContext: CIContext!
     lazy private var fetchedResultsControllerFilters: NSFetchedResultsController! = {
         var request = NSFetchRequest(entityName: "Filter")
         request.sortDescriptors = [NSSortDescriptor(key: "idx", ascending: true)]
@@ -129,15 +126,15 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func generateFilterThumbnailWithOptions(options: NSDictionary) {
-        thumbnailFiltersOriginal = nil
-        thumbnailFiltersArray = [UIImage]()
+        thumbnailFilterImageOriginal = nil
+        thumbnailFilterImages = [Int: UIImage]()
         
         if self.filtersActive {
             self.filterCollectionView.reloadData()
         }
         
         var completionFunction = { (thumbnailImage: UIImage?) -> Void in
-            self.thumbnailFiltersOriginal = thumbnailImage
+            self.thumbnailFilterImageOriginal = thumbnailImage
             
             if self.filtersActive {
                 self.filterCollectionView.reloadData()
@@ -154,6 +151,22 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 completionFunction(thumbnailImage)
             })
         }
+    }
+    
+    private func filteredImageWithFilter(filter: CIFilter, image: UIImage!) -> UIImage? {
+        if image == nil {
+            return nil
+        }
+        
+        if let coreImageOriginal = CIImage(image: image) as CIImage? {
+            filter.setValue(coreImageOriginal, forKey: kCIInputImageKey)
+            if let coreImageFiltered = filter.valueForKey(kCIOutputImageKey) as CIImage? {
+                var imageRef = self.coreImageContext.createCGImage(coreImageFiltered, fromRect: coreImageOriginal.extent())
+                return UIImage(CGImage: imageRef)
+            }
+        }
+        
+        return image
     }
     
     // MARK: UIImagePickerControllerDelegate Methods
@@ -197,37 +210,31 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as FilterCell
         
-        let filter = fetchedResultsControllerFilters?.objectAtIndexPath(indexPath) as Filter
-        cell.titleLabel.text = filter.friendlyName
+        let filterManagedObject = fetchedResultsControllerFilters?.objectAtIndexPath(indexPath) as Filter
+        cell.titleLabel.text = filterManagedObject.friendlyName
+        cell.imageView.image = thumbnailFilterImageOriginal
         
-        if let thumbnailFiltersArray = thumbnailFiltersArray {
-            if thumbnailFiltersArray.count <= indexPath.row {
-                cell.imageView.image = thumbnailFiltersOriginal
-                if thumbnailFiltersOriginal != nil {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                        var image = CIImage(image: self.thumbnailFiltersOriginal)
-                        var imageFilter = self.filtersArray[indexPath.row]
-                        imageFilter.setValue(image, forKey: kCIInputImageKey)
-                        
-                        // Generate the results
-                        let result = imageFilter.valueForKey(kCIOutputImageKey) as CIImage
-                        let imageRef = self.graphicsContext.createCGImage(result, fromRect: result.extent())
-                        let filteredImage = UIImage(CGImage: imageRef)
-                        self.thumbnailFiltersArray!.append(filteredImage)
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            collectionView.reloadItemsAtIndexPaths([indexPath])
-                        })
-                    })
-                }
-            }
-            else {
-                cell.imageView.image = thumbnailFiltersArray[indexPath.row]
-            }
+        if let filteredImage = thumbnailFilterImages[indexPath.row] {
+            cell.imageView.image = filteredImage
         }
-        else {
-            cell.imageView.image = thumbnailFiltersOriginal
+        else if thumbnailFilterImageOriginal != nil {
+            
+            if coreImageContext == nil {
+                coreImageContext = CIContext(EAGLContext: EAGLContext(API: EAGLRenderingAPI.OpenGLES2), options: [kCIContextWorkingColorSpace: NSNull()])
+            }
+            // Must get filter on main thread, as it's lazy, thus not thread-safe
+            var curFilter = self.filtersArray[indexPath.row]
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                var filteredImage = self.filteredImageWithFilter(curFilter, image: self.thumbnailFilterImageOriginal)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.thumbnailFilterImages[indexPath.row] = filteredImage
+                    if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? FilterCell {
+                        cell.imageView.image = filteredImage
+                    }
+                })
+            })
         }
-        
         
         return cell
     }
