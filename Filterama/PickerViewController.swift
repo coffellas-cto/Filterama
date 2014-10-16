@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import Photos
 
 protocol PickerViewControllerDelegate : NSObjectProtocol {
     func galleryVC(galleryVC: PickerViewController, selectedImagePath: String)
+    func galleryVC(galleryVC: PickerViewController, selectedImage: UIImage?)
 }
 
 enum PickerViewControllerMode {
@@ -21,16 +23,11 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     weak var delegate: PickerViewControllerDelegate?
     var mode: PickerViewControllerMode = .Documents
-    private var imagesPathsArray = NSArray()
-
-    @IBOutlet weak var collection: UICollectionView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBAction func cancel(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    // MARK: Private Methods
+    var assetSizeFinal: CGSize = CGSizeZero
     
-    private func documentsFilePaths() -> NSArray {
+    private var assetFetchResults: PHFetchResult!
+    private var imageManager: PHCachingImageManager!
+    lazy private var imagesPathsArray: NSArray = {
         var retVal = NSMutableArray()
         let fileManager = NSFileManager.defaultManager()
         let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first as NSString
@@ -42,12 +39,19 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         return retVal.filteredArrayUsingPredicate(NSPredicate(format: "pathExtension IN %@", ["jpg", "jpeg", "png", "tiff", "bmp"]))
+    }()
+
+    @IBOutlet weak var collection: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBAction func cancel(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
+    // MARK: Private Methods
     
     private func fetchSource() {
         activityIndicator.startAnimating()
-        if mode == .Documents {
-            imagesPathsArray = documentsFilePaths()
+        if mode == .PhotosFramework {
+            self.assetFetchResults = PHAsset.fetchAssetsWithOptions(nil)
         }
         collection.reloadData()
         activityIndicator.stopAnimating()
@@ -85,19 +89,45 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
     // MARK: UICollectionView Delegates Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesPathsArray.count
+        if mode == .Documents {
+            return imagesPathsArray.count
+        }
+        
+        return self.assetFetchResults.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("GALLERY_CELL", forIndexPath: indexPath) as GalleryCell
         cell.imageView.image = nil
         cell.activityIndicator.startAnimating()
+        let sideSize = cell.frame.width
         
-        ThumbnailGenerator.generateThumbnailFromFileAtPath(self.imagesPathsArray[indexPath.row] as? String, size: cell.imageView.frame.width) { (thumbnailImage) -> Void in
-            if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
-                cell.imageView.image = thumbnailImage
+        if mode == .Documents {
+            ThumbnailGenerator.generateThumbnailFromFileAtPath(self.imagesPathsArray[indexPath.row] as? String, size: sideSize) { (thumbnailImage) -> Void in
+                if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
+                    cell.imageView.image = thumbnailImage
+                }
+                cell.activityIndicator.stopAnimating()
             }
-            cell.activityIndicator.stopAnimating()
+        }
+        else {
+            if imageManager == nil {
+                imageManager = PHCachingImageManager()
+            }
+            
+            var asset = self.assetFetchResults[indexPath.row] as PHAsset
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                self.imageManager.requestImageForAsset(asset, targetSize: CGSize(width: sideSize, height: sideSize), contentMode: .AspectFill, options: nil) { (image, info) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if let cell = self.collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
+                            cell.imageView.image = image
+                        }
+                        cell.activityIndicator.stopAnimating()
+                    })
+                }
+                
+                return
+            })
         }
         
         return cell
@@ -105,7 +135,18 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let delegate = delegate {
-            delegate.galleryVC(self, selectedImagePath: imagesPathsArray[indexPath.row] as String)
+            if mode == .Documents {
+                delegate.galleryVC(self, selectedImagePath: imagesPathsArray[indexPath.row] as String)
+            }
+            else {
+                if let cell = collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
+                    var asset = self.assetFetchResults[indexPath.row] as PHAsset
+                    self.imageManager.requestImageForAsset(asset, targetSize: assetSizeFinal, contentMode: .AspectFill, options: nil, resultHandler: { (image, info) -> Void in
+                        delegate.galleryVC(self, selectedImage: image)
+                        return
+                    })
+                }
+            }
         }
     }
     

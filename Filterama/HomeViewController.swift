@@ -16,7 +16,17 @@ let kFilterThumbnailGenerationOptionKeyImage = "image"
 class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PickerViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: Private Properties
-    private var innerGalleryVC: PickerViewController?
+    lazy private var innerGalleryVC: PickerViewController! = {
+        var innerGalleryVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("GALLERY_VC") as? PickerViewController
+        innerGalleryVC?.delegate = self
+        return innerGalleryVC
+    }()
+    lazy private var photoFrameworkVC: PickerViewController! = {
+        var photoFrameworkVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("GALLERY_VC") as PickerViewController!
+        photoFrameworkVC.delegate = self
+        photoFrameworkVC.mode = PickerViewControllerMode.PhotosFramework
+        return photoFrameworkVC
+    }()
     private var filtersActive = false
     private var mainImageOriginal: UIImage?
     private var thumbnailFilterImageOriginal: UIImage?
@@ -56,14 +66,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         var alertController = UIAlertController(title: "Choose an option", message: "", preferredStyle: .ActionSheet)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Filterama Pictures", style: .Default, handler: { (action) -> Void in
-            if self.innerGalleryVC == nil {
-                self.innerGalleryVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("GALLERY_VC") as? PickerViewController
-                self.innerGalleryVC?.delegate = self
-            }
-            self.presentViewController(self.innerGalleryVC!, animated: true, completion: nil)
+            self.presentViewController(self.innerGalleryVC, animated: true, completion: nil)
         }))
-        alertController.addAction(UIAlertAction(title: "Photo Library", style: .Default, handler: { (action) -> Void in
-            self.showPickerViewWithSourceType(.PhotoLibrary)
+        alertController.addAction(UIAlertAction(title: "Photos (Ph. Framework)", style: .Default, handler: { (action) -> Void in
+            let sideSize = self.imageView.frame.width
+            self.photoFrameworkVC.assetSizeFinal = CGSize(width: sideSize, height: sideSize)
+            self.presentViewController(self.photoFrameworkVC, animated: true, completion: nil)
         }))
         alertController.addAction(UIAlertAction(title: "Camera", style: .Default, handler: { (action) -> Void in
             self.showPickerViewWithSourceType(.Camera)
@@ -208,6 +216,22 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         })
         
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImagePath: selectedImagePath])
+    }
+    
+    func galleryVC(galleryVC: PickerViewController, selectedImage: UIImage?) {
+        activityIndicatorImage.startAnimating()
+        galleryVC.dismissViewControllerAnimated(true, completion: nil)
+        
+        if selectedImage == nil {
+            activityIndicatorImage.stopAnimating()
+            return
+        }
+        
+        ThumbnailGenerator.generateThumbnailForImage(selectedImage, size: self.imageView.frame.width) { (thumbnailImage) -> Void in
+            self.setMainImage(thumbnailImage)
+        }
+        
+        generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: selectedImage!])
     }
     
     // MARK: UICollectionView Delegates Methods
