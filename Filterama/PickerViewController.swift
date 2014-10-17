@@ -71,16 +71,11 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
             let layout = collection.collectionViewLayout as UICollectionViewFlowLayout
             let sideSize = layout.itemSize.width * multiplier
             if (sideSize > 20) && (sideSize < 300) {
-                layout.invalidateLayout()
-                layout.itemSize = CGSize(width: layout.itemSize.width * multiplier, height: layout.itemSize.height * multiplier)
-                collection.collectionViewLayout = layout
-                
                 collection.performBatchUpdates({ () -> Void in
-                    UIView.setAnimationsEnabled(false)
-                    // Need to reload data, so new thumbnail is applied
-                    self.collection.reloadSections(NSIndexSet(index: 0))
+                    layout.itemSize = CGSize(width: layout.itemSize.width * multiplier, height: layout.itemSize.height * multiplier)
                 }, completion: { (completed) -> Void in
-                    UIView.setAnimationsEnabled(true)
+                    // Need to reload data, so a new thumbnail is applied for every cell
+                    self.collection.reloadSections(NSIndexSet(index: 0))
                 })
             }
         }
