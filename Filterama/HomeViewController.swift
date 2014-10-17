@@ -27,6 +27,10 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         photoFrameworkVC.mode = PickerViewControllerMode.PhotosFramework
         return photoFrameworkVC
     }()
+    lazy var videoCaptureVC: VideoCaptureViewController! = {
+        var videoCaptureVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("VIDEOCAPTURE_VC") as VideoCaptureViewController!
+        return videoCaptureVC
+    }()
     private var filtersActive = false
     private var mainImageOriginal: UIImage?
     private var thumbnailFilterImageOriginal: UIImage?
@@ -73,9 +77,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.photoFrameworkVC.assetSizeFinal = CGSize(width: sideSize, height: sideSize)
             self.presentViewController(self.photoFrameworkVC, animated: true, completion: nil)
         }))
-        alertController.addAction(UIAlertAction(title: "Camera", style: .Default, handler: { (action) -> Void in
-            self.showPickerViewWithSourceType(.Camera)
-            }))
+        alertController.addAction(UIAlertAction(title: "Camera (AV Foundation)", style: .Default, handler: { (action) -> Void in
+            self.presentViewController(self.videoCaptureVC, animated: true, completion: nil)
+        }))
         alertController.addAction(UIAlertAction(title: "Saved Photos", style: .Default, handler: { (action) -> Void in
             self.showPickerViewWithSourceType(.SavedPhotosAlbum)
         }))
