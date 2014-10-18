@@ -14,11 +14,12 @@ class VideoCaptureViewController: UIViewController {
     private var stillImageOutput = AVCaptureStillImageOutput()
     private var previewLayer: AVCaptureVideoPreviewLayer!
     private var captureSession = AVCaptureSession()
+    private var imageOriginal: UIImage?
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var captureView: UIView!
     @IBOutlet weak var previewImageView: UIImageView!
     @IBAction func takePicture(sender: AnyObject) {
-        println("take a pic")
         var videoConnection: AVCaptureConnection!
         outerLoop: for connection in stillImageOutput.connections {
             // Find a proper connection
@@ -39,6 +40,7 @@ class VideoCaptureViewController: UIViewController {
             return
         }
         
+        // Detecting orientation of camera
         var newOrientation: AVCaptureVideoOrientation
         switch UIDevice.currentDevice().orientation {
             case .PortraitUpsideDown:
@@ -59,12 +61,18 @@ class VideoCaptureViewController: UIViewController {
         stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {(buffer : CMSampleBuffer!, error : NSError!) -> Void in
             var data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
             // Boooooooo!
-            var image = UIImage(data: data)
-            self.previewImageView.image = image
-            println(image.size)
+            self.activityIndicator.startAnimating()
+            self.imageOriginal = UIImage(data: data)
+            if self.imageOriginal != nil {
+                ThumbnailGenerator.generateThumbnailFromData(data, size: 64, completion: { (thumbnailImage) -> Void in
+                    self.previewImageView.image = thumbnailImage
+                    self.activityIndicator.stopAnimating()
+                })
+            }
         })
         
     }
+    
     // MARK: UIViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,7 +111,8 @@ class VideoCaptureViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        //previewLayer.frame = CGRectMake(0, 0, captureView.bounds.width, captureView.bounds.height)
+        let newSize = captureView.bounds.size;
+        previewLayer.position = CGPointMake(0.5 * newSize.width, 0.5 * newSize.height);
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {

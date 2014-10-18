@@ -30,13 +30,59 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Filterama/VideoCaptureViewController.swift"
-            timestampString = "435272658.508571"
+            timestampString = "435274321.868785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "31"
             endingLineNumber = "31"
             landmarkName = "takePicture(_:)"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Filterama/HomeViewController.swift"
+            timestampString = "435282013.383542"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "applyFilterToMainImage(_:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Filterama.HomeViewController.(applyFilterToMainImage (Filterama.HomeViewController) -&gt; (Swift.Float) -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "Filterama"
+                  urlString = "file:///Users/alexg/Desktop/Coffellas/Dropbox/repo_folder/Code%20Fellows/Filterama/Filterama/HomeViewController.swift"
+                  timestampString = "435280623.421207"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "228"
+                  endingLineNumber = "228"
+                  offsetFromSymbolStart = "129">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Filterama.HomeViewController.(applyFilterToMainImage (Filterama.HomeViewController) -&gt; (Swift.Float) -&gt; ()).(closure #1).(closure #1).(closure #1)"
+                  moduleName = "Filterama"
+                  urlString = "file:///Users/alexg/Desktop/Coffellas/Dropbox/repo_folder/Code%20Fellows/Filterama/Filterama/HomeViewController.swift"
+                  timestampString = "435280623.421429"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "229"
+                  endingLineNumber = "229"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -36,6 +36,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private var thumbnailFilterImageOriginal: UIImage?
     private var thumbnailFilterImages = [Int: UIImage]()
     private var coreImageContext: CIContext!
+    private var currentFilter: CIFilter!
     lazy private var fetchedResultsControllerFilters: NSFetchedResultsController! = {
         var request = NSFetchRequest(entityName: "Filter")
         request.sortDescriptors = [NSSortDescriptor(key: "idx", ascending: true)]
@@ -45,12 +46,17 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         assert(error == nil, "\(error?.localizedDescription)")
         return retVal
     }()
-    
+        
     lazy private var filtersArray: [CIFilter]! = {
         var retVal = [CIFilter]()
         for filterManagedObject in self.fetchedResultsControllerFilters.fetchedObjects! as [Filter] {
             var curFilter = CIFilter(name: filterManagedObject.name)
-            curFilter.setDefaults()
+            if curFilter.name() == "CIColorPosterize" {
+                curFilter.setValue(3, forKey:"inputLevels")
+            }
+            else {
+                curFilter.setDefaults()
+            }
             retVal.append(curFilter)
         }
         
@@ -64,6 +70,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var showFiltersButton: UIButton!
     @IBOutlet weak var activityIndicatorImage: UIActivityIndicatorView!
     
+    @IBOutlet weak var slider: UISlider!
     // MARK: IBActions
     
     @IBAction func loadPicture(sender: AnyObject) {
@@ -109,6 +116,11 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: Constraints
     
     @IBOutlet weak var constraintHeightFilterCollectionView: NSLayoutConstraint!
+    
+    // MARK: Public Methods
+    func sliderChanged(sender: UISlider) {
+        applyFilterToMainImage(sender.value)
+    }
     
     // MARK: Private Methods
     
@@ -188,6 +200,54 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.activityIndicatorImage.stopAnimating()
     }
     
+    private func applyFilterToMainImage(value: Float) {
+        if currentFilter == nil {
+            return
+        }
+        
+        var canChangeFilter = true
+        
+        var newValue = value
+        var key: String?
+        
+        switch currentFilter.name() {
+        case "CISepiaTone":
+            key = "inputIntensity"
+        case "CIGaussianBlur":
+            key = "inputRadius"
+            newValue = value * 20.0
+        case "CIPixellate":
+            key = "inputScale"
+            newValue = value * 16.0
+        case "CIColorPosterize":
+            newValue = value * 10.0 + 2
+            key = "inputLevels"
+        case "CIExposureAdjust":
+            key = "inputEV"
+            default:
+                canChangeFilter = false
+        }
+        
+        println(newValue)
+        
+        if canChangeFilter {
+            currentFilter.setValue(newValue, forKey: key)
+        }
+        
+        activityIndicatorImage.startAnimating()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            let filteredImage = self.filteredImageWithFilter(self.currentFilter!, image: self.mainImageOriginal)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if filteredImage != nil {
+                    UIView.transitionWithView(self.imageView, duration: 0.2, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+                        self.imageView.image = filteredImage
+                    }, completion: nil)
+                }
+                self.activityIndicatorImage.stopAnimating()
+            })
+        })
+    }
+    
     // MARK: UIImagePickerControllerDelegate Methods
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
@@ -263,7 +323,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.thumbnailFilterImages[indexPath.row] = filteredImage
                     if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? FilterCell {
-                        cell.imageView.image = filteredImage
+                        UIView.transitionWithView(cell.imageView, duration: 0.2, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+                            cell.imageView.image = filteredImage
+                        }, nil)
                     }
                 })
             })
@@ -277,17 +339,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        currentFilter = filtersArray[indexPath.row]
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
-        activityIndicatorImage.startAnimating()
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let filteredImage = self.filteredImageWithFilter(self.filtersArray[indexPath.row], image: self.mainImageOriginal)
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if filteredImage != nil {
-                    self.imageView.image = filteredImage
-                }
-                self.activityIndicatorImage.stopAnimating()
-            })
-        })
+        applyFilterToMainImage(slider.value)
     }
     
     // MARK: UIViewController Life Cycle
@@ -296,6 +350,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         super.viewDidLoad()
         filterCollectionView.delegate = self
         filterCollectionView.dataSource = self
+        
+        slider.addTarget(self, action: "sliderChanged:", forControlEvents: .TouchUpInside)
+        slider.addTarget(self, action: "sliderChanged:", forControlEvents: .TouchUpOutside)
     }
 
     override func didReceiveMemoryWarning() {

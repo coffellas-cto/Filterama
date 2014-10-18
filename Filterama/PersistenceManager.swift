@@ -101,8 +101,8 @@ class PersistenceManager {
                 newFilter.name = "CIPixellate"
                 newFilter.friendlyName = "Pixellate"
             case 3:
-                newFilter.name = "CIGammaAdjust"
-                newFilter.friendlyName = "Gamma"
+                newFilter.name = "CIColorPosterize"
+                newFilter.friendlyName = "Posterize"
             case 4:
                 newFilter.name = "CIExposureAdjust"
                 newFilter.friendlyName = "Exposure"
