@@ -143,8 +143,11 @@
                                                 <action selector="saveState:" destination="fie-jw-KR9" id="EVY-tN-1aH"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Save" id="z1s-L9-RP5">
+                                        <barButtonItem key="rightBarButtonItem" title="Save / Post" id="z1s-L9-RP5">
                                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="save:" destination="fie-jw-KR9" id="fDy-GA-WXl"/>
+                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -195,6 +198,7 @@
                         <outlet property="filterCollectionView" destination="rFg-nI-sOt" id="qwa-Mz-Q5e"/>
                         <outlet property="imageView" destination="mhc-n5-Bat" id="tg6-9I-iGM"/>
                         <outlet property="loadButton" destination="KIK-63-GrA" id="m5W-T7-MuR"/>
+                        <outlet property="navBar" destination="46k-fs-M6B" id="fCi-eb-sFo"/>
                         <outlet property="showFiltersButton" destination="i8F-7w-qJN" id="TF6-K5-6Y5"/>
                         <outlet property="slider" destination="zcp-PV-2zo" id="bP0-gF-f15"/>
                     </connections>

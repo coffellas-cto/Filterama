@@ -70,14 +70,37 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var loadButton: UIButton!
     @IBOutlet weak var showFiltersButton: UIButton!
     @IBOutlet weak var activityIndicatorImage: UIActivityIndicatorView!
-    
     @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var navBar: UINavigationBar!
+    
     // MARK: IBActions
     
     @IBAction func saveState(sender: AnyObject) {
         mainImageOriginal = imageView.image
         showSlider(false)
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: mainImageOriginal!])
+    }
+    
+    @IBAction func save(sender: AnyObject) {
+        if imageView.image == nil {
+            return
+        }
+        
+        var alertController = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Save to Photo Library", style: .Default, handler: { (action) -> Void in
+            
+        }))
+        alertController.addAction(UIAlertAction(title: "Post on Twitter", style: .Default, handler: { (action) -> Void in
+            
+        }))
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            alertController.modalPresentationStyle = .Popover
+            alertController.popoverPresentationController?.sourceView = navBar
+            alertController.popoverPresentationController?.sourceRect = navBar.bounds
+        }
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     @IBAction func loadPicture(sender: AnyObject) {
