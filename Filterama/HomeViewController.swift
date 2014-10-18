@@ -37,6 +37,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private var thumbnailFilterImages = [Int: UIImage]()
     private var coreImageContext: CIContext!
     private var currentFilter: CIFilter!
+    private var applyingFilter = false
     lazy private var fetchedResultsControllerFilters: NSFetchedResultsController! = {
         var request = NSFetchRequest(entityName: "Filter")
         request.sortDescriptors = [NSSortDescriptor(key: "idx", ascending: true)]
@@ -72,6 +73,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     @IBOutlet weak var slider: UISlider!
     // MARK: IBActions
+    
+    @IBAction func saveState(sender: AnyObject) {
+        mainImageOriginal = imageView.image
+        showSlider(false)
+        generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: mainImageOriginal!])
+    }
     
     @IBAction func loadPicture(sender: AnyObject) {
         var alertController = UIAlertController(title: "Choose an option", message: "", preferredStyle: .ActionSheet)
@@ -186,21 +193,40 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         if let coreImageOriginal = CIImage(image: image) as CIImage? {
             filter.setValue(coreImageOriginal, forKey: kCIInputImageKey)
             if let coreImageFiltered = filter.valueForKey(kCIOutputImageKey) as CIImage? {
-                var imageRef = self.coreImageContext.createCGImage(coreImageFiltered, fromRect: coreImageOriginal.extent())
-                return UIImage(CGImage: imageRef)
+                let imageRef = self.coreImageContext.createCGImage(coreImageFiltered, fromRect: coreImageOriginal.extent())
+                let image = UIImage(CGImage: imageRef)
+                return image
             }
         }
         
         return image
     }
     
+    private func showSlider(show: Bool) {
+        UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.slider.alpha = show ? 1 : 0
+        })
+    }
+    
     private func setMainImage(image: UIImage?) {
-        self.mainImageOriginal = image
-        self.imageView.image = image
-        self.activityIndicatorImage.stopAnimating()
+        for indexPath in filterCollectionView.indexPathsForSelectedItems() {
+            filterCollectionView.deselectItemAtIndexPath(indexPath as? NSIndexPath, animated: false)
+        }
+        
+        showSlider(false)
+        
+        mainImageOriginal = image
+        imageView.image = image
+        activityIndicatorImage.stopAnimating()
     }
     
     private func applyFilterToMainImage(value: Float) {
+        if applyingFilter {
+            return
+        }
+        
+        applyingFilter = true
+        
         if currentFilter == nil {
             return
         }
@@ -228,7 +254,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 canChangeFilter = false
         }
         
-        println(newValue)
+        //println(newValue)
+        
+        showSlider(canChangeFilter)
         
         if canChangeFilter {
             currentFilter.setValue(newValue, forKey: key)
@@ -243,6 +271,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                         self.imageView.image = filteredImage
                     }, completion: nil)
                 }
+                self.applyingFilter = false
                 self.activityIndicatorImage.stopAnimating()
             })
         })
@@ -306,6 +335,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let filterManagedObject = fetchedResultsControllerFilters?.objectAtIndexPath(indexPath) as Filter
         cell.titleLabel.text = filterManagedObject.friendlyName
         cell.imageView.image = thumbnailFilterImageOriginal
+        cell.backgroundColor = cell.selected ? UIColor(white: 1, alpha: 0.05) : UIColor.clearColor()
         
         if let filteredImage = thumbnailFilterImages[indexPath.row] {
             cell.imageView.image = filteredImage
@@ -340,8 +370,16 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         currentFilter = filtersArray[indexPath.row]
-        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) {
+            cell.backgroundColor = UIColor(white: 1, alpha: 0.05)
+        }
         applyFilterToMainImage(slider.value)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) {
+            cell.backgroundColor = UIColor.clearColor()
+        }
     }
     
     // MARK: UIViewController Life Cycle
@@ -351,6 +389,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         filterCollectionView.delegate = self
         filterCollectionView.dataSource = self
         
+        slider.alpha = 0
         slider.addTarget(self, action: "sliderChanged:", forControlEvents: .TouchUpInside)
         slider.addTarget(self, action: "sliderChanged:", forControlEvents: .TouchUpOutside)
     }

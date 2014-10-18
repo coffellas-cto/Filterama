@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mhc-n5-Bat">
-                                <rect key="frame" x="101" y="28" width="398" height="398"/>
+                                <rect key="frame" x="101" y="72" width="398" height="398"/>
                                 <color key="backgroundColor" red="0.33333333329999998" green="0.30980392159999998" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="420" id="3og-Fy-KJ6">
@@ -55,7 +55,7 @@
                                 </variation>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KIK-63-GrA">
-                                <rect key="frame" x="254" y="434" width="93" height="34"/>
+                                <rect key="frame" x="254" y="478" width="93" height="34"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
                                 <state key="normal" title="Load picture">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -66,7 +66,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i8F-7w-qJN">
-                                <rect key="frame" x="257" y="462" width="86" height="34"/>
+                                <rect key="frame" x="257" y="506" width="86" height="34"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
                                 <state key="normal" title="Show filters">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -120,29 +120,69 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <slider opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcp-PV-2zo">
+                                <rect key="frame" x="99" y="548" width="402" height="31"/>
+                                <color key="minimumTrackTintColor" red="0.33333333329999998" green="0.30980392159999998" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="thumbTintColor" red="0.81960784310000001" green="0.85490196080000003" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </slider>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="46k-fs-M6B">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="LZq-S1-nGS"/>
+                                    <constraint firstAttribute="height" constant="32" id="YTQ-16-DRw"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.33333333329999998" green="0.30980392159999998" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </textAttributes>
+                                <items>
+                                    <navigationItem title="Filterama" id="EMa-CJ-aGs">
+                                        <barButtonItem key="leftBarButtonItem" title="Save state" id="Ztd-Hc-o2x">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="saveState:" destination="fie-jw-KR9" id="EVY-tN-1aH"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Save" id="z1s-L9-RP5">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="YTQ-16-DRw"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact">
+                                    <mask key="constraints">
+                                        <exclude reference="LZq-S1-nGS"/>
+                                        <include reference="YTQ-16-DRw"/>
+                                    </mask>
+                                </variation>
+                            </navigationBar>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="exV-0j-001">
-                                <rect key="frame" x="101" y="28" width="398" height="398"/>
+                                <rect key="frame" x="101" y="72" width="398" height="398"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcp-PV-2zo">
-                                <rect key="frame" x="99" y="504" width="402" height="31"/>
-                            </slider>
                         </subviews>
                         <color key="backgroundColor" red="0.094117647060000004" green="0.086274509799999996" blue="0.08235294118" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="mhc-n5-Bat" firstAttribute="top" secondItem="46k-fs-M6B" secondAttribute="bottom" constant="8" id="2Rm-6w-dXi"/>
                             <constraint firstItem="i8F-7w-qJN" firstAttribute="top" secondItem="mhc-n5-Bat" secondAttribute="bottom" constant="36" id="9T7-TI-NCr"/>
                             <constraint firstAttribute="centerX" secondItem="KIK-63-GrA" secondAttribute="centerX" id="DAK-6l-eTM"/>
                             <constraint firstItem="KIK-63-GrA" firstAttribute="top" secondItem="mhc-n5-Bat" secondAttribute="bottom" constant="8" symbolic="YES" id="EsS-2h-Pzd"/>
-                            <constraint firstItem="exV-0j-001" firstAttribute="top" secondItem="tgQ-ke-nMv" secondAttribute="bottom" constant="8" id="LWt-KA-HkT"/>
+                            <constraint firstItem="exV-0j-001" firstAttribute="top" secondItem="46k-fs-M6B" secondAttribute="bottom" constant="8" id="FHq-YV-sOy"/>
                             <constraint firstItem="exV-0j-001" firstAttribute="width" secondItem="mhc-n5-Bat" secondAttribute="width" id="PuG-ER-wHx"/>
                             <constraint firstItem="rFg-nI-sOt" firstAttribute="leading" secondItem="0Bg-Np-K5s" secondAttribute="leading" id="Q8c-zb-Rkv"/>
+                            <constraint firstAttribute="trailing" secondItem="46k-fs-M6B" secondAttribute="trailing" id="SrE-ta-usU"/>
                             <constraint firstAttribute="centerX" secondItem="zcp-PV-2zo" secondAttribute="centerX" id="UDg-nk-r0S"/>
                             <constraint firstAttribute="trailing" secondItem="rFg-nI-sOt" secondAttribute="trailing" id="ZYV-AA-lnm"/>
                             <constraint firstAttribute="centerX" secondItem="exV-0j-001" secondAttribute="centerX" id="bGb-v7-OMW"/>
                             <constraint firstAttribute="centerX" secondItem="mhc-n5-Bat" secondAttribute="centerX" id="dIq-x6-EYu"/>
                             <constraint firstItem="exV-0j-001" firstAttribute="height" secondItem="mhc-n5-Bat" secondAttribute="height" id="eXW-vB-Ap3"/>
                             <constraint firstAttribute="centerX" secondItem="i8F-7w-qJN" secondAttribute="centerX" id="ecl-4m-9ti"/>
-                            <constraint firstItem="mhc-n5-Bat" firstAttribute="top" secondItem="tgQ-ke-nMv" secondAttribute="bottom" constant="8" id="ldN-a8-ZSY"/>
+                            <constraint firstItem="46k-fs-M6B" firstAttribute="top" secondItem="0Bg-Np-K5s" secondAttribute="top" id="lGa-IC-qz1"/>
+                            <constraint firstItem="46k-fs-M6B" firstAttribute="leading" secondItem="0Bg-Np-K5s" secondAttribute="leading" id="paG-wC-m1p"/>
                             <constraint firstItem="dmY-qO-8jc" firstAttribute="top" secondItem="rFg-nI-sOt" secondAttribute="bottom" id="tVG-7v-ONA"/>
                             <constraint firstItem="mhc-n5-Bat" firstAttribute="width" secondItem="zcp-PV-2zo" secondAttribute="width" id="vOt-9H-pZb"/>
                             <constraint firstItem="zcp-PV-2zo" firstAttribute="top" secondItem="i8F-7w-qJN" secondAttribute="bottom" constant="8" id="wz0-kt-whI"/>
@@ -199,11 +239,17 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aFP-Fw-912">
                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                                     <color key="backgroundColor" red="0.50413797670000005" green="0.49791405109999998" blue="0.49791405109999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <variation key="heightClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
+                                                    </variation>
                                                 </imageView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="jWv-uH-eD4">
                                                     <rect key="frame" x="22" y="22" width="20" height="20"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <variation key="heightClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                                    </variation>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
