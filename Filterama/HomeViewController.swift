@@ -87,12 +87,20 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: mainImageOriginal!])
     }
     
+    func showSocialComposerWithServiceType(type: String!) {
+        let twitterComposer = SLComposeViewController(forServiceType: type)
+        twitterComposer.addImage(self.imageView.image)
+        twitterComposer.setInitialText("#filterama ")
+        twitterComposer.addURL(NSURL(string: "https://github.com/coffellas-cto/Filterama"))
+        self.presentViewController(twitterComposer, animated: true, completion: nil)
+    }
+    
     @IBAction func save(sender: AnyObject) {
         if imageView.image == nil {
             return
         }
         
-        var alertController = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
+        var alertController = UIAlertController(title: "Save / Share", message: "", preferredStyle: .ActionSheet)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Save to Photo Library", style: .Default, handler: { (action) -> Void in
             PHPhotoLibrary.sharedPhotoLibrary().performChanges({ () -> Void in
@@ -107,12 +115,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             })
         }))
         
-        alertController.addAction(UIAlertAction(title: "Post on Twitter", style: .Default, handler: { (action) -> Void in
-            let twitterComposer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-            twitterComposer.addImage(self.imageView.image)
-            twitterComposer.setInitialText("#filterama ")
-            twitterComposer.addURL(NSURL(string: "https://github.com/coffellas-cto/Filterama"))
-            self.presentViewController(twitterComposer, animated: true, completion: nil)
+        alertController.addAction(UIAlertAction(title: "Share on Twitter", style: .Default, handler: { (action) -> Void in
+            self.showSocialComposerWithServiceType(SLServiceTypeTwitter)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Share on Facebook", style: .Default, handler: { (action) -> Void in
+            self.showSocialComposerWithServiceType(SLServiceTypeFacebook)
         }))
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
