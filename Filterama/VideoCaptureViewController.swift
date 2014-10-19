@@ -10,15 +10,32 @@ import UIKit
 import AVFoundation
 
 class VideoCaptureViewController: UIViewController {
+    // MARK: Public Properties
+    weak var delegate: PickerViewControllerDelegate?
     
+    // MARK: Private Properties
     private var stillImageOutput = AVCaptureStillImageOutput()
     private var previewLayer: AVCaptureVideoPreviewLayer!
     private var captureSession = AVCaptureSession()
-    private var imageOriginal: UIImage?
+    private var imageOriginalData: NSData?
+    private var input: AVCaptureDeviceInput!
     
+    // MARK: Outlets
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var captureView: UIView!
     @IBOutlet weak var previewImageView: UIImageView!
+    
+    // MARK: Actions
+    @IBAction func cancel(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func choose(sender: AnyObject) {
+        if let delegate = delegate {
+            delegate.pickerVC(self, selectedImageData: imageOriginalData)
+        }
+    }
+    
     @IBAction func takePicture(sender: AnyObject) {
         var videoConnection: AVCaptureConnection!
         outerLoop: for connection in stillImageOutput.connections {
@@ -56,15 +73,16 @@ class VideoCaptureViewController: UIViewController {
                 newOrientation = .Portrait;
         }
         
+        println(newOrientation.toRaw())
+        
         videoConnection.videoOrientation = newOrientation
         
+        self.activityIndicator.startAnimating()
         stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {(buffer : CMSampleBuffer!, error : NSError!) -> Void in
-            var data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
             // Boooooooo!
-            self.activityIndicator.startAnimating()
-            self.imageOriginal = UIImage(data: data)
-            if self.imageOriginal != nil {
-                ThumbnailGenerator.generateThumbnailFromData(data, size: 64, completion: { (thumbnailImage) -> Void in
+            self.imageOriginalData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
+            if self.imageOriginalData != nil {
+                ThumbnailGenerator.generateThumbnailFromData(self.imageOriginalData, size: 64, completion: { (thumbnailImage) -> Void in
                     self.previewImageView.image = thumbnailImage
                     self.activityIndicator.stopAnimating()
                 })
@@ -87,18 +105,25 @@ class VideoCaptureViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         var device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         var error : NSError?
-        var input = AVCaptureDeviceInput.deviceInputWithDevice(device, error: &error) as AVCaptureDeviceInput!
         if input == nil {
-            self.dismissViewControllerAnimated(true, completion: { () -> Void in
-                UIAlertView(title: "Error", message: "Can't initialize camera", delegate: nil, cancelButtonTitle: "OK").show()
-            })
-            return
+            input = AVCaptureDeviceInput.deviceInputWithDevice(device, error: &error) as AVCaptureDeviceInput!
+            if input == nil {
+                self.dismissViewControllerAnimated(true, completion: { () -> Void in
+                    UIAlertView(title: "Error", message: "Can't initialize camera", delegate: nil, cancelButtonTitle: "OK").show()
+                })
+                return
+            }
+            captureSession.addInput(input)
+            stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+            captureSession.addOutput(self.stillImageOutput)
+            captureSession.startRunning()
         }
-        captureSession.addInput(input)
-        var outputSettings = [AVVideoCodecKey : AVVideoCodecJPEG]
-        stillImageOutput.outputSettings = outputSettings
-        captureSession.addOutput(self.stillImageOutput)
-        captureSession.startRunning()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        imageOriginalData = nil
+        previewImageView.image = nil
     }
 
     override func didReceiveMemoryWarning() {
@@ -125,11 +150,11 @@ class VideoCaptureViewController: UIViewController {
     
     func updatePreviewLayerForOrientation(interfaceOrientation: UIInterfaceOrientation)
     {
-        // correct position of previewLayer
+        // Correct position of previewLayer
         let newSize = captureView.bounds.size;
         previewLayer.position = CGPointMake(0.5 * newSize.width, 0.5 * newSize.height);
         var angle: Double!
-        // rotate the previewLayer, in order to have camera picture right
+        // Rotate the previewLayer, in order to have camera picture right
         switch interfaceOrientation {
             case .Portrait:
                 angle = 0

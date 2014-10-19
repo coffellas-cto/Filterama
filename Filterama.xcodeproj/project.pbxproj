@@ -57,15 +57,15 @@
 		9A5062D519EC3B2A00D0FCD6 /* FilteramaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FilteramaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A5062DA19EC3B2A00D0FCD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A5062DB19EC3B2A00D0FCD6 /* FilteramaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteramaTests.swift; sourceTree = "<group>"; };
-		9A5062E519EC3CC500D0FCD6 /* PickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
+		9A5062E519EC3CC500D0FCD6 /* PickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PickerViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		9A5062E819EC426800D0FCD6 /* GalleryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCell.swift; sourceTree = "<group>"; };
-		9A5062EE19EC65D300D0FCD6 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		9A5062EE19EC65D300D0FCD6 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HomeViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		9AD0FC3319EC80EF0064302C /* pic01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic01.jpg; sourceTree = "<group>"; };
 		9AD0FC3419EC80EF0064302C /* pic02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic02.jpg; sourceTree = "<group>"; };
 		9AD0FC3519EC80EF0064302C /* pic03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic03.jpg; sourceTree = "<group>"; };
 		9AD0FC3619EC80EF0064302C /* pic04.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic04.jpg; sourceTree = "<group>"; };
 		9AD0FC3719EC80EF0064302C /* pic05.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic05.jpg; sourceTree = "<group>"; };
-		9AE0C23319F0ED8100EB1BDC /* VideoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewController.swift; sourceTree = "<group>"; };
+		9AE0C23319F0ED8100EB1BDC /* VideoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VideoCaptureViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

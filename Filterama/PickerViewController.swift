@@ -10,8 +10,9 @@ import UIKit
 import Photos
 
 protocol PickerViewControllerDelegate : NSObjectProtocol {
-    func galleryVC(galleryVC: PickerViewController, selectedImagePath: String)
-    func galleryVC(galleryVC: PickerViewController, selectedImage: UIImage?)
+    func pickerVC(pickerVC: UIViewController, selectedImagePath: String)
+    func pickerVC(pickerVC: UIViewController, selectedImage: UIImage?)
+    func pickerVC(pickerVC: UIViewController, selectedImageData: NSData?)
 }
 
 enum PickerViewControllerMode {
@@ -131,14 +132,14 @@ class PickerViewController: UIViewController, UICollectionViewDataSource, UIColl
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let delegate = delegate {
             if mode == .Documents {
-                delegate.galleryVC(self, selectedImagePath: imagesPathsArray[indexPath.row] as String)
+                delegate.pickerVC(self, selectedImagePath: imagesPathsArray[indexPath.row] as String)
             }
             else {
                 if let cell = collection.cellForItemAtIndexPath(indexPath) as? GalleryCell {
                     var asset = self.assetFetchResults[indexPath.row] as PHAsset
-                    self.imageManager.requestImageForAsset(asset, targetSize: assetSizeFinal, contentMode: .AspectFill, options: nil, resultHandler: { (image, info) -> Void in
-                        delegate.galleryVC(self, selectedImage: image)
-                        return
+                    
+                    self.imageManager.requestImageDataForAsset(asset, options: nil, resultHandler: { (data, dataUTI, imageOrientation, info) -> Void in
+                        delegate.pickerVC(self, selectedImageData: data)
                     })
                 }
             }

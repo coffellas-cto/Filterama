@@ -31,6 +31,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }()
     lazy var videoCaptureVC: VideoCaptureViewController! = {
         var videoCaptureVC = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("VIDEOCAPTURE_VC") as VideoCaptureViewController!
+        videoCaptureVC.delegate = self
         return videoCaptureVC
     }()
     private var filtersActive = false
@@ -353,9 +354,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // MARK: PickerViewControllerDelegate Methods
     
-    func galleryVC(galleryVC: PickerViewController, selectedImagePath: String) {
+    func pickerVC(pickerVC: UIViewController, selectedImagePath: String) {
         activityIndicatorImage.startAnimating()
-        galleryVC.dismissViewControllerAnimated(true, completion: nil)
+        pickerVC.dismissViewControllerAnimated(true, completion: nil)
         ThumbnailGenerator.generateThumbnailFromFileAtPath(selectedImagePath, size: self.imageView.frame.width, completion: { (thumbnailImage) -> Void in
             self.setMainImage(thumbnailImage)
         })
@@ -363,9 +364,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImagePath: selectedImagePath])
     }
     
-    func galleryVC(galleryVC: PickerViewController, selectedImage: UIImage?) {
+    func pickerVC(pickerVC: UIViewController, selectedImage: UIImage?) {
         activityIndicatorImage.startAnimating()
-        galleryVC.dismissViewControllerAnimated(true, completion: nil)
+        pickerVC.dismissViewControllerAnimated(true, completion: nil)
         
         if selectedImage == nil {
             activityIndicatorImage.stopAnimating()
@@ -377,6 +378,22 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
         
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: selectedImage!])
+    }
+    
+    func pickerVC(pickerVC: UIViewController, selectedImageData: NSData?) {
+        if selectedImageData == nil {
+            return
+        }
+        
+        activityIndicatorImage.startAnimating()
+        pickerVC.dismissViewControllerAnimated(true, completion: nil)
+        
+        ThumbnailGenerator.generateThumbnailFromData(selectedImageData, size: self.imageView.frame.width) { (thumbnailImage) -> Void in
+            self.setMainImage(thumbnailImage)
+            if thumbnailImage != nil {
+                self.generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: thumbnailImage!])
+            }
+        }
     }
     
     // MARK: UICollectionView Delegates Methods
