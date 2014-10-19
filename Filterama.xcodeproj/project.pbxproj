@@ -21,6 +21,9 @@
 		9A5062E619EC3CC500D0FCD6 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062E519EC3CC500D0FCD6 /* PickerViewController.swift */; };
 		9A5062E919EC426800D0FCD6 /* GalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062E819EC426800D0FCD6 /* GalleryCell.swift */; };
 		9A5062EF19EC65D300D0FCD6 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5062EE19EC65D300D0FCD6 /* HomeViewController.swift */; };
+		9A77D78719F3673C003DC795 /* camera_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A77D78419F3673C003DC795 /* camera_button.png */; };
+		9A77D78819F3673C003DC795 /* camera_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A77D78519F3673C003DC795 /* camera_button@2x.png */; };
+		9A77D78919F3673C003DC795 /* camera_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A77D78619F3673C003DC795 /* camera_button@3x.png */; };
 		9AD0FC3819EC80EF0064302C /* pic01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9AD0FC3319EC80EF0064302C /* pic01.jpg */; };
 		9AD0FC3919EC80EF0064302C /* pic02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9AD0FC3419EC80EF0064302C /* pic02.jpg */; };
 		9AD0FC3A19EC80EF0064302C /* pic03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9AD0FC3519EC80EF0064302C /* pic03.jpg */; };
@@ -60,6 +63,9 @@
 		9A5062E519EC3CC500D0FCD6 /* PickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PickerViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		9A5062E819EC426800D0FCD6 /* GalleryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCell.swift; sourceTree = "<group>"; };
 		9A5062EE19EC65D300D0FCD6 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HomeViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		9A77D78419F3673C003DC795 /* camera_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_button.png; sourceTree = "<group>"; };
+		9A77D78519F3673C003DC795 /* camera_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_button@2x.png"; sourceTree = "<group>"; };
+		9A77D78619F3673C003DC795 /* camera_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_button@3x.png"; sourceTree = "<group>"; };
 		9AD0FC3319EC80EF0064302C /* pic01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic01.jpg; sourceTree = "<group>"; };
 		9AD0FC3419EC80EF0064302C /* pic02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic02.jpg; sourceTree = "<group>"; };
 		9AD0FC3519EC80EF0064302C /* pic03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic03.jpg; sourceTree = "<group>"; };
@@ -189,6 +195,9 @@
 		9A5062EB19EC456500D0FCD6 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				9A77D78419F3673C003DC795 /* camera_button.png */,
+				9A77D78519F3673C003DC795 /* camera_button@2x.png */,
+				9A77D78619F3673C003DC795 /* camera_button@3x.png */,
 				9AD0FC3319EC80EF0064302C /* pic01.jpg */,
 				9AD0FC3419EC80EF0064302C /* pic02.jpg */,
 				9AD0FC3519EC80EF0064302C /* pic03.jpg */,
@@ -283,9 +292,12 @@
 				9AD0FC3819EC80EF0064302C /* pic01.jpg in Resources */,
 				9A5062D019EC3B2A00D0FCD6 /* LaunchScreen.xib in Resources */,
 				9A5062CD19EC3B2A00D0FCD6 /* Images.xcassets in Resources */,
+				9A77D78819F3673C003DC795 /* camera_button@2x.png in Resources */,
+				9A77D78919F3673C003DC795 /* camera_button@3x.png in Resources */,
 				9AD0FC3B19EC80EF0064302C /* pic04.jpg in Resources */,
 				9AD0FC3919EC80EF0064302C /* pic02.jpg in Resources */,
 				9AD0FC3A19EC80EF0064302C /* pic03.jpg in Resources */,
+				9A77D78719F3673C003DC795 /* camera_button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

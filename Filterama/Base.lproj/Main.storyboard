@@ -76,7 +76,7 @@
                                     <action selector="showFilters:" destination="fie-jw-KR9" eventType="touchUpInside" id="HEy-Me-5TT"/>
                                 </connections>
                             </button>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rFg-nI-sOt">
                                 <color key="backgroundColor" red="0.094117647060000004" green="0.086274509799999996" blue="0.08235294118" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" id="gF4-J9-vad"/>
@@ -104,9 +104,6 @@
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="8" y="25" width="34" height="17"/>
-                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -245,17 +242,11 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aFP-Fw-912">
                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                                     <color key="backgroundColor" red="0.50413797670000005" green="0.49791405109999998" blue="0.49791405109999998" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <variation key="heightClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
-                                                    </variation>
                                                 </imageView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="jWv-uH-eD4">
                                                     <rect key="frame" x="22" y="22" width="20" height="20"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <variation key="heightClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="-10" y="-10" width="20" height="20"/>
-                                                    </variation>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -368,7 +359,7 @@
                                             <constraint firstAttribute="width" constant="64" id="5wS-Um-0cL"/>
                                             <constraint firstAttribute="height" constant="64" id="76d-Hq-RUa"/>
                                         </constraints>
-                                        <state key="normal" title="Take a pic">
+                                        <state key="normal" title="Take a pic" image="camera_button.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -545,4 +536,7 @@
             <point key="canvasLocation" x="207" y="798"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="camera_button.png" width="64" height="64"/>
+    </resources>
 </document>
