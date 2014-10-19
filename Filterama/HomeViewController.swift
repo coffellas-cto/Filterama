@@ -9,6 +9,8 @@
 import UIKit
 import CoreImage
 import CoreData
+import Photos
+import Social
 
 let kFilterThumbnailGenerationOptionKeyImagePath = "imagePath"
 let kFilterThumbnailGenerationOptionKeyImage = "image"
@@ -77,6 +79,10 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     @IBAction func saveState(sender: AnyObject) {
         mainImageOriginal = imageView.image
+        if mainImageOriginal == nil {
+            return
+        }
+        
         showSlider(false)
         generateFilterThumbnailWithOptions([kFilterThumbnailGenerationOptionKeyImage: mainImageOriginal!])
     }
@@ -89,11 +95,26 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         var alertController = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Save to Photo Library", style: .Default, handler: { (action) -> Void in
-            
+            PHPhotoLibrary.sharedPhotoLibrary().performChanges({ () -> Void in
+                PHAssetChangeRequest.creationRequestForAssetFromImage(self.imageView.image)
+                return
+            }, completionHandler: { (completed, error) -> Void in
+                if error != nil {
+                    UIAlertView(title: "Error", message: "Can't save picture. \(error.localizedDescription)", delegate: nil, cancelButtonTitle: "OK").show()
+                    return
+                }
+                println("Saved to library")
+            })
         }))
+        
         alertController.addAction(UIAlertAction(title: "Post on Twitter", style: .Default, handler: { (action) -> Void in
-            
+            let twitterComposer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+            twitterComposer.addImage(self.imageView.image)
+            twitterComposer.setInitialText("#filterama ")
+            twitterComposer.addURL(NSURL(string: "https://github.com/coffellas-cto/Filterama"))
+            self.presentViewController(twitterComposer, animated: true, completion: nil)
         }))
+        
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             alertController.modalPresentationStyle = .Popover
             alertController.popoverPresentationController?.sourceView = navBar

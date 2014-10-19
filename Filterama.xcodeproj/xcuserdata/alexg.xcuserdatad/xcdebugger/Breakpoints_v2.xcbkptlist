@@ -46,11 +46,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Filterama/HomeViewController.swift"
-            timestampString = "435302806.734732"
+            timestampString = "435372565.223991"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "293"
-            endingLineNumber = "293"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
             landmarkName = "applyFilterToMainImage(_:)"
             landmarkType = "5">
             <Locations>
