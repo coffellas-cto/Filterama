@@ -165,6 +165,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         if !filtersActive {
             filterCollectionView.reloadData()
         }
+        else {
+            showSlider(false)
+        }
         
         filtersActive = !filtersActive
         
@@ -439,6 +442,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         currentFilter = filtersArray[indexPath.row]
+        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: true)
         if let cell = collectionView.cellForItemAtIndexPath(indexPath) {
             cell.backgroundColor = UIColor(white: 1, alpha: 0.05)
         }
